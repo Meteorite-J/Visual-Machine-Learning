@@ -15,30 +15,25 @@
     </script>
     <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
-    <script src="./javascripts/svm.js"></script>
-	<script src="./javascripts/pegasos.js"></script>
+    <script src="./javascripts/pegasos.js"></script>
     <script type="text/javascript">
 
     /*
-    This demo includes npg library (notpygamejs) that I wrote a while ago. It can
-    be found on my Github page (https://github.com/karpathy/notpygamejs). It's a
-    quick and dirty canvas wrapper that has some helped functions I use often.
-    It's main use is to contain a main loop and expose methods update(), draw(),
-    as well as some events keyUp(), mouseClick() etc.
+    This demo includes npg library (notpygamejs) written by Andrej Karpathy. It can
+    be found on his Github page (https://github.com/karpathy/notpygamejs). 
     */
 
-
-    var N= 10; //number of data points
+    var N= 50; //number of data points
     var data = new Array(N);
     var labels= new Array(N);
     var wb; // weights and offset structure
     var ss= 50.0; // scaling factor for drawing
-    var svm= new svmjs.SVM();
+    var svm= new pegasos.SVM();
     var trainstats;
     var dirty= true;
     var kernelid= 1;
     var rbfKernelSigma = 0.5;
-    var svmC = 1.0;
+	var peg_lambda = 1e-4;
 
     function myinit(){
 
@@ -53,10 +48,10 @@
     function retrainSVM() {
 
       if(kernelid === 1) {
-        trainstats= svm.train(data, labels, { kernel: 'rbf', rbfsigma: rbfKernelSigma, C: svmC});
+        trainstats= svm.train(data, labels, { kernel: 'rbf', rbfsigma: rbfKernelSigma, lambda: peg_lambda});
       }
       if(kernelid === 0) {
-        trainstats= svm.train(data, labels, { kernel: 'linear' , C: svmC});
+        trainstats= svm.train(data, labels, { kernel: 'linear' , lambda: peg_lambda});
         wb= svm.getWeights();
       }
 
@@ -75,7 +70,7 @@
         var density= 4.0;
         for(var x=0.0; x<=WIDTH; x+= density) {
           for(var y=0.0; y<=HEIGHT; y+= density) {
-            var dec= svm.marginOne([(x-WIDTH/2)/ss, (y-HEIGHT/2)/ss]);
+            var dec= svm.predictOne([(x-WIDTH/2)/ss, (y-HEIGHT/2)/ss]);
             if(dec>0) ctx.fillStyle = 'rgb(150,250,150)';
             else ctx.fillStyle = 'rgb(250,150,150)';
             ctx.fillRect(x-density/2-1, y-density-1, density+2, density+2);
@@ -102,7 +97,7 @@
           if(svm.alpha[i]>1e-2) ctx.lineWidth = 3; // distinguish support vectors
           else ctx.lineWidth = 1;
 
-          drawCircle(data[i][0]*ss+WIDTH/2, data[i][1]*ss+HEIGHT/2, Math.floor(3+svm.alpha[i]*5.0/svmC));
+          drawCircle(data[i][0]*ss+WIDTH/2, data[i][1]*ss+HEIGHT/2, Math.floor(3+svm.alpha[i]*2));
         }
 
         // if linear kernel, draw decision boundary and margin lines
@@ -156,7 +151,7 @@
         if(kernelid === 1) ctx.fillText("Using Rbf kernel with sigma = " + rbfKernelSigma.toPrecision(2), 10, HEIGHT - 70);
         if(kernelid === 0) ctx.fillText("Using Linear kernel", 10, HEIGHT - 70);
 
-        ctx.fillText("C = " + svmC.toPrecision(2), 10, HEIGHT - 90);
+        //ctx.fillText("C = " + svmC.toPrecision(2), 10, HEIGHT - 90);
     }
 
     function mouseClick(x, y, shiftPressed){
