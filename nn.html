@@ -11,7 +11,12 @@
     <script type="text/javascript" src="javascripts/jqueryui/js/jquery-ui-1.8.21.custom.min.js"></script>
     <script src="./javascripts/npg/npgmain.js"></script>
     <script type="text/x-mathjax-config">
-    MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processClass: "mathJax"
+      }
+    });
     </script>
     <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
@@ -247,7 +252,7 @@
 
         <p>$x \ne y$</p>
 
-        <pre>$x \ne y$</pre>
+        <pre class="mathJax">$x \ne y$</pre>
       </section>
     </div>
 
