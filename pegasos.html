@@ -23,7 +23,7 @@
     be found on his Github page (https://github.com/karpathy/notpygamejs). 
     */
 
-    var N= 50; //number of data points
+    var N= 20; //number of data points
     var data = new Array(N);
     var labels= new Array(N);
     var wb; // weights and offset structure
@@ -34,6 +34,7 @@
     var kernelid= 1;
     var rbfKernelSigma = 0.5;
 	var peg_lambda = 1e-4;
+	var alpha_tol = 1e-4;
 
     function myinit(){
 
@@ -48,7 +49,7 @@
     function retrainSVM() {
 
       if(kernelid === 1) {
-        trainstats= svm.train(data, labels, { kernel: 'rbf', rbfsigma: rbfKernelSigma, lambda: peg_lambda});
+        trainstats= svm.train(data, labels, { kernel: 'rbf', rbfsigma: rbfKernelSigma, lambda: peg_lambda, alphatol: alpha_tol});
       }
       if(kernelid === 0) {
         trainstats= svm.train(data, labels, { kernel: 'linear' , lambda: peg_lambda});
@@ -66,8 +67,10 @@
 
         ctx.clearRect(0,0,WIDTH,HEIGHT);
 
-        // draw decisions in the grid
+        // draw the decision boundary
         var density= 4.0;
+		//predict every point in the grid
+		//and fill with the appropriate color
         for(var x=0.0; x<=WIDTH; x+= density) {
           for(var y=0.0; y<=HEIGHT; y+= density) {
             var dec= svm.predictOne([(x-WIDTH/2)/ss, (y-HEIGHT/2)/ss]);
@@ -81,23 +84,27 @@
         ctx.beginPath();
         ctx.strokeStyle = 'rgb(50,50,50)';
         ctx.lineWidth = 1;
+		// move to middle left
         ctx.moveTo(0, HEIGHT/2);
+		// draw x axis
         ctx.lineTo(WIDTH, HEIGHT/2);
+		// move to top middle
         ctx.moveTo(WIDTH/2, 0);
+		//draw y axis
         ctx.lineTo(WIDTH/2, HEIGHT);
         ctx.stroke();
 
-        // draw datapoints. Draw support vectors larger
+        // draw data points. Draw support vectors larger
         ctx.strokeStyle = 'rgb(0,0,0)';
         for(var i=0;i<N;i++) {
-
+			//check label : red or green
           if(labels[i]==1) ctx.fillStyle = 'rgb(100,200,100)';
           else ctx.fillStyle = 'rgb(200,100,100)';
-
+			
           if(svm.alpha[i]>1e-2) ctx.lineWidth = 3; // distinguish support vectors
           else ctx.lineWidth = 1;
 
-          drawCircle(data[i][0]*ss+WIDTH/2, data[i][1]*ss+HEIGHT/2, Math.floor(3+svm.alpha[i]*2));
+          drawCircle(data[i][0]*ss+WIDTH/2, data[i][1]*ss+HEIGHT/2, Math.floor(3 + ((svm.alpha[i] > alpha_tol) ? (svm.alpha[i]*N*10 - 7) : 0)));
         }
 
         // if linear kernel, draw decision boundary and margin lines
@@ -152,6 +159,7 @@
         if(kernelid === 0) ctx.fillText("Using Linear kernel", 10, HEIGHT - 70);
 
         //ctx.fillText("C = " + svmC.toPrecision(2), 10, HEIGHT - 90);
+		dirty = false;
     }
 
     function mouseClick(x, y, shiftPressed){

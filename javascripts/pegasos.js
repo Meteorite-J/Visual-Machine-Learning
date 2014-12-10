@@ -26,6 +26,8 @@ var pegasos = (function(){
 	  //stop iterations if there are no updates after
 	  //this amount of consecutive iterations
       var maxIdle = options.maxIdle || 2 * data.length;
+	  //alpha tolerance
+	  var alphatol = options.alphatol || 1e-4;
       
       // instantiate kernel according to options. kernel can be given as string or as a custom function
       var kernel = dotProduct;
@@ -56,6 +58,7 @@ var pegasos = (function(){
       this.N = data.length;
       this.D = data[0].length;
       this.alpha = zeros(this.N);
+	  this.svIndex = [];
       
 	  //Monitor updates during iterations
 	  var idleCount = 0;
@@ -98,28 +101,25 @@ var pegasos = (function(){
           this.usew_ = true;
         }
       } else {
-
-        //get the support vectors
+		
+		//Normalise the support vectors
+		var sum = 0;
+		for(var p=0;p<this.N;p++) {
+          sum += this.alpha[p];
+        }
+		
+        //get the index of the support vectors
 		//non-zero alpha
-        var svData = [];
-        var svLabels = [];
-        var svAlpha = [];
+		//Only the support vectors are needed to compute the margins when predicting
+		//But the whole data is needed when drawing
+        
         for(var p=0;p<this.N;p++) {
-          //console.log("alpha=%f", this.alpha[i]);
-          if(this.alpha[p] > 0) {
-            svData.push(this.data[p]);
-            svLabels.push(this.labels[p]);
-            svAlpha.push(this.alpha[p]);
+          this.alpha[p] /= sum;
+          if(this.alpha[p] > alphatol) {
+            this.svIndex.push(p);
           }
         }
-
-        // discard previous data
-		// and use only support vectors data
-        this.data = svData;
-        this.labels = svLabels;
-        this.alpha = svAlpha;
-        this.N = this.data.length;
-        //console.log("filtered training data from %d to %d support vectors.", data.length, this.data.length);
+		
       }
 	  
 	  var trainstats = {};
@@ -130,8 +130,8 @@ var pegasos = (function(){
     computeMargin: function(inst) {
 	
       var f = 0;
-		for(var i=0;i<this.N;i++) {
-		  f += this.alpha[i] * this.labels[i] * this.kernel(inst, this.data[i]);
+		for(var i=0;i<this.svIndex.length;i++) {
+		  f += this.alpha[this.svIndex[i]] * this.labels[this.svIndex[i]] * this.kernel(inst, this.data[this.svIndex[i]]);
 		}
 		
        return f;
