@@ -287,3 +287,7 @@ iframe {
     height: 100%;
     border: none;
 }
+
+iframe::-webkit-scrollbar {  
+  display: none;
+}
