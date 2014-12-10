@@ -10,6 +10,11 @@ body {
   font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
 }
 
+#particles-js{
+  height:100%;
+  background:#b61924
+}
+
 /* General & 'Reset' Stuff */
 
 .container {
