@@ -281,7 +281,7 @@ canvas {
 }
 
 iframe {
-    overflow: auto;
+    overflow: -moz-scrollbars-none;
     position: absolute;
     width: 100%;
     height: 100%;
