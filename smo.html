@@ -24,7 +24,8 @@
     <!--<script src="./javascripts/pegasos.js"></script>-->
     <script type="text/javascript">
 
-      var N= 10; //number of data points
+      var default_value = 10; //number of data points
+      var N = default_value;
       var data = new Array(N);
       var labels= new Array(N);
       var wb; // weights and offset structure
@@ -71,7 +72,8 @@
         var density= 4.0;
         for (var x=0.0; x<=WIDTH; x+= density) {
           for (var y=0.0; y<=HEIGHT; y+= density) {
-            var dec= svm.marginOne([(x-WIDTH/2)/ss, (y-HEIGHT/2)/ss]);
+            var dec = svm.marginOne([(x-WIDTH/2)/ss, (y-HEIGHT/2)/ss]);
+            if(N===1) dec = labels[0];
             if (dec>0) ctx.fillStyle = 'rgb(150,250,150)';
             else ctx.fillStyle = 'rgb(250,150,150)';
             ctx.fillRect(x-density/2-1, y-density-1, density+2, density+2);
@@ -98,7 +100,7 @@
           if (svm.alpha[i]>1e-2) ctx.lineWidth = 3; // distinguish support vectors
           else ctx.lineWidth = 1;
 
-          drawCircle(data[i][0]*ss+WIDTH/2, data[i][1]*ss+HEIGHT/2, Math.floor(3+svm.alpha[i]*5.0/svmC));
+          drawCircle(data[i][0]*ss+WIDTH/2, data[i][1]*ss+HEIGHT/2, Math.floor(3+ ((svm.alpha.length == 0) ? 0 : svm.alpha[i]) *5.0/svmC));
         }
 
         // if linear kernel, draw decision boundary and margin lines
@@ -143,15 +145,16 @@
         }
 
         ctx.fillStyle= 'rgb(0,0,0)';
-        ctx.fillText("Converged in " + trainstats.iters + " iterations.", 10, HEIGHT-30);
+        ctx.fillText("Converged in " + trainstats.iters + " iterations.", default_value, HEIGHT-30);
         var numsupp=0;
         for (var i=0;i<N;i++) { if(svm.alpha[i] > 1e-5) numsupp++; }
-        ctx.fillText("Number of support vectors: " + numsupp + " / " + N, 10, HEIGHT-50);
+        ctx.fillText("Number of support vectors: " + numsupp + " / " + N, default_value, HEIGHT-50);
 
-        if(kernelid === 1) ctx.fillText("Using Rbf kernel with sigma = " + rbfKernelSigma.toPrecision(2), 10, HEIGHT - 70);
-        if(kernelid === 0) ctx.fillText("Using Linear kernel", 10, HEIGHT - 70);
+        if(kernelid === 1) ctx.fillText("Using Rbf kernel with sigma = " + rbfKernelSigma.toPrecision(2), default_value, HEIGHT - 70);
+        if(kernelid === 0) ctx.fillText("Using Linear kernel", default_value, HEIGHT - 70);
 
-        ctx.fillText("C = " + svmC.toPrecision(2), 10, HEIGHT - 90);
+        ctx.fillText("C = " + svmC.toPrecision(2), default_value, HEIGHT - 90);
+        dirty = false;
       }
 
       function mouseClick(x, y, shiftPressed){
@@ -166,8 +169,8 @@
       function keyUp(key){
         if(key==82) { // 'r'
           // reset to original data and retrain
-          data= data.splice(0, 10);
-          labels= labels.splice(0, 10);
+          data= data.splice(0, default_value);
+          labels= labels.splice(0, default_value);
           N= 10;
           retrainSVM();
         }
@@ -176,6 +179,31 @@
           kernelid= 1-kernelid; // toggle 1 and 0
           retrainSVM();
         }
+      }
+
+      function reset(){
+        // reset to original data and retrain
+        data = data.splice(0, default_value);
+        labels = labels.splice(0, default_value);
+        N = 10;
+        retrainSVM();
+      }
+
+      function clearCanvas(){
+        // clear all the points and let the users do their own initialization
+        data = [];
+        labels = [];
+        N = 0;
+        ctx.clearRect(0,0,WIDTH,HEIGHT);
+        /*var density= 4.0;
+        for (var x=0.0; x<=WIDTH; x+= density) {
+          for (var y=0.0; y<=HEIGHT; y+= density) {
+            ctx.fillStyle = 'rgb(150,250,150)';
+            ctx.fillRect(x-density/2-1, y-density-1, density+2, density+2);
+          }
+        }*/
+        dirty= false;
+        //return;
       }
 
       function keyDown(key){
@@ -240,6 +268,10 @@
         <b>'r'</b>: reset<br />
         </p>
 
+        <div class="operations">
+          <button class="btn" onclick="reset();">Reset</button>
+          <button class="btn" onclick="clearCanvas();">Clear</button>
+        </div>
         <canvas id="NPGcanvas" width="500" height="500"></canvas>
 
         <!--<p><small>Please get a real browser if the 'canvas' tag is not supported in your current one.</small></p>-->

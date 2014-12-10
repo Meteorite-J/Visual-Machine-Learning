@@ -89,7 +89,9 @@ var svmjs = (function(exports){
             
             // alpha_i needs updating! Pick a j to update it with
             var j = i;
-            while(j === i) j= randi(0, this.N);
+            if(this.N > 1) {
+            	while(j === i) j= randi(0, this.N);
+            }
             var Ej= this.marginOne(data[j]) - labels[j];
             
             // calculate L and H bounds for j to ensure we're in [0 C]x[0 C] box

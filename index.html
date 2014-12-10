@@ -29,7 +29,8 @@
           <ul>
             <!--the ui-sref directive binds a link to a $state-->
             <li><a ui-sref="About" class="nav">About</a></li>
-            <li><a ui-sref="SVM" class="nav">Support Vector Machine</a></li>
+            <li><a ui-sref="SMO" class="nav">SMO SVM</a></li>
+            <li><a ui-sref="PEGASOS" class="nav">PEGASOS SVM</a></li>
             <li><a ui-sref="NN" class="nav">Neural Network</a></li>
           </ul>
         </div>
@@ -109,9 +110,14 @@
               templateUrl: "about.html"
           })
             
-          .state('SVM', {
-              url: "/SVM",
+          .state('SMO', {
+              url: "/SMO",
               template: '<div class="fluid"><iframe src="smo.html" allowtransparency="true" scrolling="no"></iframe></div>'
+          })
+
+          .state('PEGASOS', {
+              url: "/PEGASOS",
+              template: '<div class="fluid"><iframe src="pegasos.html" allowtransparency="true" scrolling="no"></iframe></div>'
           })
 
           .state('NN', {
