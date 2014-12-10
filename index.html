@@ -8,6 +8,11 @@
     <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen">
 
     <title>Visual Machine Learning</title>
+    <script type="text/javascript">
+      function resizeIframe(obj) {
+        obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
+      }
+    </script>
   </head>
 
   <body>
@@ -66,7 +71,7 @@
             
           .state('SVM', {
               url: "/SVM",
-              template: '<div class="fluid"><iframe src="smo.html" scrolling="no"></iframe></div>'
+              template: '<div class="fluid"><iframe src="smo.html" scrolling="no" onload='javascript:resizeIframe(this);'></iframe></div>'
           })
             /*.state('route2.list', {
                 url: "/list",
