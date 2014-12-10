@@ -21,7 +21,6 @@
       This demo includes npg library (notpygamejs) written by Andrej Karpathy. It can
       be found on his Github page (https://github.com/karpathy/notpygamejs). 
       */
-      NPGinit(50);
 
       var N= 50; //number of data points
       var data = new Array(N);
@@ -229,8 +228,8 @@
     <title>Visual-machine-learning by Metoerite</title>
   </head>
 
-  <body onLoad="NPGinit(10);">
-
+  <!--<body onLoad="NPGinit(10);">-->
+  <body>
     <div class="container">
       <section id="main_content">
         <h3><a class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>Support Vector Machine Using the SMO Algorithm</h3>
@@ -243,7 +242,10 @@
         <b>'r'</b>: reset<br />
         </p>
 
-        <canvas id="NPGcanvas" onLoad="NPGinit(10);" width="500" height="500"></canvas>
+        <canvas id="NPGcanvas" width="500" height="500"></canvas>
+        <script>
+          NPGinit(10);
+        </script>
 
         <p><small>Please get a real browser if the 'canvas' tag is not supported in your current one.</small></p>
 
