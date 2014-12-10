@@ -9,17 +9,26 @@ html,body,div,span,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,abbr,address
 }
 
 body {
+    font: normal 75% Arial, Helvetica, sans-serif;
+    background: url('../img/darkbg.jpg') no-repeat #0a0d0f;
+    color: #fff;
+}
+
+body, html {
+    height: 100%;
+}
+
+/*body {
   margin: 0;
   padding: 0;
-  /*background: #151515 url("../images/bkg.png") 0 0;*/
-  /*background-color: #0c0e13;*/
+  background: #151515 url("../images/bkg.png") 0 0;
+  background-color: #0c0e13;
   background:url('../images/darkbg.jpg') no-repeat #0a0d0f;
   color: #fff;
-  /*color: #eaeaea;*/
   font: 16px;
   line-height: 1.5;
   font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
-}
+}*/
 
 /* General & 'Reset' Stuff */
 
