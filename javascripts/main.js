@@ -1,17 +1,5 @@
 $(function(){
 
-	//if(navigator.appVersion.indexOf("Windows")!=-1) $('body').addClass('pcuser');
-
-
-	//var lang = $('html').attr('lang');
-	
-	/*if(lang == 'fr'){
-		var w = 328;
-		if(navigator.language.substring(0,2) == 'en') window.location.href = 'http://vincentgarreau.com/en';
-	}else{
-		var w = 280;
-	}*/
-
 	if (screen.width > 980 && $(window).width() > 620){
 
 		launch_pJS();
