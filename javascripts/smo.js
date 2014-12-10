@@ -1,7 +1,7 @@
 // MIT License
 // Andrej Karpathy
 
-var svmjs = (function(exports){
+var smo = (function(exports){
 
   /*
     This is a binary SVM and is trained using the SMO algorithm.

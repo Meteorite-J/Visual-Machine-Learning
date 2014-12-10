@@ -20,7 +20,7 @@
     </script>
     <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
-    <script src="./javascripts/svm.js"></script>
+    <script src="./javascripts/smo.js"></script>
     <!--<script src="./javascripts/pegasos.js"></script>-->
     <script type="text/javascript">
 
@@ -30,7 +30,7 @@
       var labels= new Array(N);
       var wb; // weights and offset structure
       var ss= 50.0; // scaling factor for drawing
-      var svm= new svmjs.SVM();
+      var svm= new smo.SVM();
       var trainstats;
       var dirty= true;
       var kernelid= 1;
