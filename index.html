@@ -8,11 +8,6 @@
     <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen">
 
     <title>Visual Machine Learning</title>
-    <script type="text/javascript">
-      function resizeIframe(obj) {
-        obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
-      }
-    </script>
   </head>
 
   <body style="zoom:1">
@@ -115,25 +110,11 @@
               url: "/About",
               templateUrl: "about.html"
           })
-            /*.state('route1.list', {
-                url: "/list",
-                templateUrl: "route1.list.html",
-                controller: function($scope){
-                  $scope.items = ["A", "List", "Of", "Items"];
-                }
-            })*/
             
           .state('SVM', {
               url: "/SVM",
               template: '<div class="fluid"><iframe src="smo.html" scrolling="no"></iframe></div>'
           })
-            /*.state('route2.list', {
-                url: "/list",
-                templateUrl: "route2.list.html",
-                controller: function($scope){
-                  $scope.things = ["A", "Set", "Of", "Things"];
-                }
-            })*/
 
           .state('NN', {
               url: "/NN",
