@@ -29,7 +29,7 @@ body, html{ height:100%; }
 }
 
 .operations {
-  margin: 30px auto;
+  margin: 20px auto;
 }
 
 section {
@@ -294,6 +294,7 @@ canvas{
 #NPGcanvas {
   border: 1px solid #555;
   background: none;
+  margin: 20px auto;
 }
 
 .fluid {
