@@ -156,7 +156,8 @@
           ctx.stroke();
         }
 
-        ctx.fillStyle= 'rgb(0,0,0)';
+        ctx.font="12px Verdana";
+        ctx.fillStyle= 'rgb(245,245,245)';
         ctx.fillText("Converged in " + trainstats.iters + " iterations.", 10, HEIGHT-30);
         var numsupp=0;
         for(var i=0;i<N;i++) { if(svm.alpha[i] > 1e-5) numsupp++; }
