@@ -175,13 +175,6 @@
       }
 
       function keyUp(key){
-        if(key==82) { // 'r'
-          // reset to original data and retrain
-          data= data.splice(0, default_value);
-          labels= labels.splice(0, default_value);
-          N= 10;
-          retrainSVM();
-        }
         if(key==75) { // 'k'
           // toggle between kernels: rbf or linear
           kernelid= 1-kernelid; // toggle 1 and 0
@@ -277,10 +270,9 @@
         <p>Instructions:</p>
 
         <p>
-        <b>mouse click</b>: add red data point<br />
-        <b>shift + mouse click</b>: add green data point<br />
+        <b>mouse click</b>: add white data point<br />
+        <b>shift + mouse click</b>: add black data point<br />
         <b>'k'</b>: toggle between Linear and Kernels<br />
-        <b>'r'</b>: reset<br />
         </p>
 
         <div class="operations">
@@ -295,7 +287,7 @@
           </div>
           <div style="width:230px; float: right; margin-right: 10px; margin-bottom: 20px;">
             <div id="slider2"></div>
-            <br/><span id="sigreport">RBF Kernel sigma = 1.0</span>
+            <br/><span id="sigreport">RBF Kernel $\sigma$ = 1.0</span>
           </div>
         </div>
 
