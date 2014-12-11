@@ -75,7 +75,7 @@
           for (var y=0.0; y<=HEIGHT; y+= density) {
             var dec = svm.marginOne([(x-WIDTH/2)/ss, (y-HEIGHT/2)/ss]);
             if(N===1) dec = labels[0];
-            // light sky blue region
+            // black region
             if (dec>0) ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
             // white region
             else ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
@@ -85,9 +85,9 @@
 
         // draw axes
         ctx.beginPath();
-        //black
+        // white
         ctx.strokeStyle = 'rgb(255,255,255)';
-        ctx.lineWidth = 1;
+        ctx.lineWidth = 0.5;
         ctx.moveTo(0, HEIGHT/2);
         ctx.lineTo(WIDTH, HEIGHT/2);
         ctx.moveTo(WIDTH/2, 0);
@@ -95,13 +95,18 @@
         ctx.stroke();
 
         // draw datapoints. Draw support vectors larger
-        ctx.strokeStyle = 'rgb(255,255,255)';
         for (var i=0;i<N;i++) {
 
-          // royal blue dots
-          if (labels[i]==1) ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
-          // white smoke dots
-          else ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+          // black dots
+          if (labels[i]==1){
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+            ctx.strokeStyle = 'rgb(10, 10, 10)';
+          }
+          // white dots
+          else{
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+            ctx.strokeStyle = 'rgb(245, 245, 245)';
+          }
 
           if (svm.alpha[i]>1e-2) ctx.lineWidth = 3; // distinguish support vectors
           else ctx.lineWidth = 1;
