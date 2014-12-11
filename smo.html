@@ -76,7 +76,7 @@
             var dec = svm.marginOne([(x-WIDTH/2)/ss, (y-HEIGHT/2)/ss]);
             if(N===1) dec = labels[0];
             // light sky blue region
-            if (dec>0) ctx.fillStyle = 'rgb(135,206,250)';
+            if (dec>0) ctx.fillStyle = 'rgba(255, 0, 0, 0.5)';
             // white region
             else ctx.fillStyle = 'rgb(255,255,255)';
             ctx.fillRect(x-density/2-1, y-density-1, density+2, density+2);
