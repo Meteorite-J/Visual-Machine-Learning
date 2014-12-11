@@ -3,7 +3,8 @@
   <head>
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-
+    
+    <link rel="stylesheet" type="text/css" href="javascripts/jqueryui/css/ui-lightness/jquery-ui-1.8.21.custom.css" media="screen">
     <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet_iframe.css" media="screen">
     <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen">
 
@@ -74,15 +75,19 @@
         for(var x=0.0; x<=WIDTH; x+= density) {
           for(var y=0.0; y<=HEIGHT; y+= density) {
             var dec= svm.predictOne([(x-WIDTH/2)/ss, (y-HEIGHT/2)/ss]);
-            if(dec>0) ctx.fillStyle = 'rgb(150,250,150)';
-            else ctx.fillStyle = 'rgb(250,150,150)';
+            if(N===1) dec = labels[0];
+            // black region
+            if (dec>0) ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+            // white region
+            else ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
             ctx.fillRect(x-density/2-1, y-density-1, density+2, density+2);
           }
         }
 
         // draw axes
         ctx.beginPath();
-        ctx.strokeStyle = 'rgb(50,50,50)';
+        // white
+        ctx.strokeStyle = 'rgb(255,255,255)';
         ctx.lineWidth = 1;
 		// move to middle left
         ctx.moveTo(0, HEIGHT/2);
@@ -95,11 +100,13 @@
         ctx.stroke();
 
         // draw data points. Draw support vectors larger
-        ctx.strokeStyle = 'rgb(0,0,0)';
+        ctx.strokeStyle = 'rgb(245, 245, 245)';
         for(var i=0;i<N;i++) {
 			//check label : red or green
-          if(labels[i]==1) ctx.fillStyle = 'rgb(100,200,100)';
-          else ctx.fillStyle = 'rgb(200,100,100)';
+          // black dots
+          if (labels[i]==1) ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+          // white dots
+          else ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
 			
           if(svm.alpha[i]>1e-2) ctx.lineWidth = 3; // distinguish support vectors
           else ctx.lineWidth = 1;
@@ -149,7 +156,8 @@
           ctx.stroke();
         }
 
-        ctx.fillStyle= 'rgb(0,0,0)';
+        ctx.font="12px Verdana";
+        ctx.fillStyle= 'rgb(245,245,245)';
         ctx.fillText("Converged in " + trainstats.iters + " iterations.", 10, HEIGHT-30);
         var numsupp=0;
         for(var i=0;i<N;i++) { if(svm.alpha[i] > 1e-5) numsupp++; }
@@ -190,6 +198,39 @@
         retrainSVM();
       }
     }
+
+    function reset(){
+        // reset to original data and retrain
+        if(cleared){
+          N = default_value;
+          myinit();
+          cleared = false;
+          return;
+        }
+        data = data.splice(0, default_value);
+        labels = labels.splice(0, default_value);
+        N = 10;
+        retrainSVM();
+      }
+
+      function clearCanvas(){
+        // clear all the points and let the users do their own initialization
+        data = [];
+        labels = [];
+        N = 0;
+        ctx.clearRect(0,0,WIDTH,HEIGHT);
+        /*var density= 4.0;
+        for (var x=0.0; x<=WIDTH; x+= density) {
+          for (var y=0.0; y<=HEIGHT; y+= density) {
+            ctx.fillStyle = 'rgb(150,250,150)';
+            ctx.fillRect(x-density/2-1, y-density-1, density+2, density+2);
+          }
+        }*/
+        dirty= false;
+        cleared = true;
+        //return;
+      }
+
     function keyDown(key){
     }
 
@@ -245,19 +286,21 @@
 
 <p>Instructions:</p>
 <p>
-<b>mouse click</b>: add red data point<br />
-<b>shift + mouse click</b>: add green data point<br />
+<b>mouse click</b>: add white data points<br />
+<b>shift + mouse click</b>: add black data points<br />
 <b>'k'</b>: toggle between Linear and Kernels<br />
-<b>'r'</b>: reset<br />
 </p>
-
+<div class="operations">
+  <button class="btn" onclick="reset();">Reset</button>
+  <button class="btn" onclick="clearCanvas();">Clear</button>
+</div>
 <canvas id="NPGcanvas" width="500" height="500"></canvas>
-
-<p><small>Please get a real browser if the 'canvas' tag is not supported in your current one.</small></p>
+<div id="optsdiv" style="width: 500px; margin-left: auto; margin-right:auto;">
+  <div style="width:230px; float: left; margin-left: 10px; margin-bottom: 20px;"><div id="slider1"></div><br/><span id="creport">C = 1.0</span></div>
+  <div style="width:230px; float: right; margin-right: 10px; margin-bottom: 20px;"><div id="slider2"></div><br/><span id="sigreport">RBF Kernel $\sigma$ = 1.0</span></div>
+</div>
 
 <h3><a id="tutorial" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>Tutorial</h3>
-
-<p>$x \ne y$</p>
 
 <pre><code>Corresponding code block
 </code></pre>

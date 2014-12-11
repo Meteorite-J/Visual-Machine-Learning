@@ -4,6 +4,7 @@
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
 
+    <link rel="stylesheet" type="text/css" href="javascripts/jqueryui/css/ui-lightness/jquery-ui-1.8.21.custom.css" media="screen">
     <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet_iframe.css" media="screen">
     <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen">
 
@@ -36,6 +37,7 @@
       var kernelid= 1;
       var rbfKernelSigma = 0.5;
       var svmC = 1.0;
+      var cleared = false;
 
       function myinit(){
 
@@ -74,28 +76,33 @@
           for (var y=0.0; y<=HEIGHT; y+= density) {
             var dec = svm.marginOne([(x-WIDTH/2)/ss, (y-HEIGHT/2)/ss]);
             if(N===1) dec = labels[0];
-            if (dec>0) ctx.fillStyle = 'rgb(150,250,150)';
-            else ctx.fillStyle = 'rgb(250,150,150)';
+            // black region
+            if (dec>0) ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+            // white region
+            else ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
             ctx.fillRect(x-density/2-1, y-density-1, density+2, density+2);
           }
         }
 
         // draw axes
         ctx.beginPath();
-        ctx.strokeStyle = 'rgb(50,50,50)';
-        ctx.lineWidth = 1;
+        // white
+        ctx.strokeStyle = 'rgb(255,255,255)';
+        ctx.lineWidth = 0.5;
         ctx.moveTo(0, HEIGHT/2);
         ctx.lineTo(WIDTH, HEIGHT/2);
         ctx.moveTo(WIDTH/2, 0);
         ctx.lineTo(WIDTH/2, HEIGHT);
         ctx.stroke();
 
+        ctx.strokeStyle = 'rgb(245, 245, 245)';
         // draw datapoints. Draw support vectors larger
-        ctx.strokeStyle = 'rgb(0,0,0)';
         for (var i=0;i<N;i++) {
 
-          if (labels[i]==1) ctx.fillStyle = 'rgb(100,200,100)';
-          else ctx.fillStyle = 'rgb(200,100,100)';
+          // black dots
+          if (labels[i]==1) ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+          // white dots
+          else ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
 
           if (svm.alpha[i]>1e-2) ctx.lineWidth = 3; // distinguish support vectors
           else ctx.lineWidth = 1;
@@ -144,7 +151,8 @@
           ctx.stroke();
         }
 
-        ctx.fillStyle= 'rgb(0,0,0)';
+        ctx.font="12px Verdana";
+        ctx.fillStyle= 'rgb(245,245,245)';
         ctx.fillText("Converged in " + trainstats.iters + " iterations.", default_value, HEIGHT-30);
         var numsupp=0;
         for (var i=0;i<N;i++) { if(svm.alpha[i] > 1e-5) numsupp++; }
@@ -167,13 +175,6 @@
       }
 
       function keyUp(key){
-        if(key==82) { // 'r'
-          // reset to original data and retrain
-          data= data.splice(0, default_value);
-          labels= labels.splice(0, default_value);
-          N= 10;
-          retrainSVM();
-        }
         if(key==75) { // 'k'
           // toggle between kernels: rbf or linear
           kernelid= 1-kernelid; // toggle 1 and 0
@@ -183,6 +184,12 @@
 
       function reset(){
         // reset to original data and retrain
+        if(cleared){
+          N = default_value;
+          myinit();
+          cleared = false;
+          return;
+        }
         data = data.splice(0, default_value);
         labels = labels.splice(0, default_value);
         N = 10;
@@ -203,6 +210,7 @@
           }
         }*/
         dirty= false;
+        cleared = true;
         //return;
       }
 
@@ -262,10 +270,9 @@
         <p>Instructions:</p>
 
         <p>
-        <b>mouse click</b>: add red data point<br />
-        <b>shift + mouse click</b>: add green data point<br />
+        <b>mouse click</b>: add white data points<br />
+        <b>shift + mouse click</b>: add black data points<br />
         <b>'k'</b>: toggle between Linear and Kernels<br />
-        <b>'r'</b>: reset<br />
         </p>
 
         <div class="operations">
@@ -273,14 +280,26 @@
           <button class="btn" onclick="clearCanvas();">Clear</button>
         </div>
         <canvas id="NPGcanvas" width="500" height="500"></canvas>
+        <div id="optsdiv">
+          <div style="width:230px; float: left; margin-left: 10px; margin-bottom: 20px;">
+            <div id="slider1"></div>
+            <br/><span id="creport">C = 1.0</span>
+          </div>
+          <div style="width:230px; float: right; margin-right: 10px; margin-bottom: 20px;">
+            <div id="slider2"></div>
+            <br/><span id="sigreport">RBF Kernel $\sigma$ = 1.0</span>
+          </div>
+        </div>
 
         <!--<p><small>Please get a real browser if the 'canvas' tag is not supported in your current one.</small></p>-->
 
+        <div class="container">
         <h3><a id="tutorial" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>Tutorial</h3>
 
         <pre class="mathJax">
           $x \ne y$
         </pre>
+        </div>
       </section>
     </div>
   </body>
