@@ -227,16 +227,16 @@
       function refreshC(event, ui) {
         var logC = ui.value;
         svmC= Math.pow(10, logC);
-        $("#sigeport").css('color', 'blue');
-        $("#creport").text("C = " + svmC.toPrecision(2));
+        $("#creport").text("C = " + svmC.toPrecision(2))
+          .css('color', 'blue');
         retrainSVM();
       }
 
       function refreshSig(event, ui) {
         var logSig = ui.value;
         rbfKernelSigma= Math.pow(10, logSig);
-        $("#sigeport").css('color', 'blue');
-        $("#sigreport").text("RBF Kernel sigma = " + rbfKernelSigma.toPrecision(2));
+        $("#sigreport").text("RBF Kernel sigma = " + rbfKernelSigma.toPrecision(2))
+          .css('color', 'blue');
         if (kernelid==1) {
           retrainSVM();
         }
