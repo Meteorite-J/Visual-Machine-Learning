@@ -74,15 +74,19 @@
         for(var x=0.0; x<=WIDTH; x+= density) {
           for(var y=0.0; y<=HEIGHT; y+= density) {
             var dec= svm.predictOne([(x-WIDTH/2)/ss, (y-HEIGHT/2)/ss]);
-            if(dec>0) ctx.fillStyle = 'rgb(150,250,150)';
-            else ctx.fillStyle = 'rgb(250,150,150)';
+            if(N===1) dec = labels[0];
+            // black region
+            if (dec>0) ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+            // white region
+            else ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
             ctx.fillRect(x-density/2-1, y-density-1, density+2, density+2);
           }
         }
 
         // draw axes
         ctx.beginPath();
-        ctx.strokeStyle = 'rgb(50,50,50)';
+        // white
+        ctx.strokeStyle = 'rgb(255,255,255)';
         ctx.lineWidth = 1;
 		// move to middle left
         ctx.moveTo(0, HEIGHT/2);
@@ -95,11 +99,13 @@
         ctx.stroke();
 
         // draw data points. Draw support vectors larger
-        ctx.strokeStyle = 'rgb(0,0,0)';
+        ctx.strokeStyle = 'rgb(245, 245, 245)';
         for(var i=0;i<N;i++) {
 			//check label : red or green
-          if(labels[i]==1) ctx.fillStyle = 'rgb(100,200,100)';
-          else ctx.fillStyle = 'rgb(200,100,100)';
+          // black dots
+          if (labels[i]==1) ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+          // white dots
+          else ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
 			
           if(svm.alpha[i]>1e-2) ctx.lineWidth = 3; // distinguish support vectors
           else ctx.lineWidth = 1;
