@@ -220,7 +220,7 @@ hr {
 
 .btn {
   display: inline-block;
-  background: -webkit-linear-gradient(top, rgba(40, 40, 40, 0.3), rgba(35, 35, 35, 0.3) 50%, rgba(10, 10, 10, 0.3) 50%, rgba(0, 0, 0, 0.3));
+  background: -webkit-linear-gradient(top, rgba(135, 210, 250, 0.3), rgba(120, 10, 200, 0.3) 50%, rgba(120, 10, 200, 0.3) 50%, rgba(150, 150, 150, 0.3));
   padding: 8px 18px;
   border-radius: 50px;
   border: 2px solid rgba(0, 0, 0, 0.7);
@@ -236,7 +236,7 @@ hr {
 }
 
 .btn:hover {
-  background: -webkit-linear-gradient(top, rgba(40, 40, 40, 0.6), rgba(35, 35, 35, 0.6) 50%, rgba(10, 10, 10, 0.8) 50%, rgba(0, 0, 0, 0.8));
+  background: -webkit-linear-gradient(top, rgba(135, 210, 250, 0.6), rgba(120, 10, 200, 0.6) 50%, rgba(120, 10, 200, 0.8) 50%, rgba(150, 150, 150, 0.8));
 }
 
 .btn .icon {
@@ -245,11 +245,6 @@ hr {
   height: 16px;
   margin: 1px 8px 0 0;
   float: left;
-}
-
-.btn-github .icon {
-  opacity: 0.6;
-  background: url("../images/blacktocat.png") 0 0 no-repeat;
 }
 
 /* Links
