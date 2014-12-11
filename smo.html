@@ -77,8 +77,8 @@
             if(N===1) dec = labels[0];
             // light sky blue region
             if (dec>0) ctx.fillStyle = 'rgb(135,206,250)';
-            // red region
-            else ctx.fillStyle = 'rgb(250,150,150)';
+            // white region
+            else ctx.fillStyle = 'rgb(255,255,255)';
             ctx.fillRect(x-density/2-1, y-density-1, density+2, density+2);
           }
         }
@@ -100,8 +100,8 @@
 
           // royal blue dots
           if (labels[i]==1) ctx.fillStyle = 'rgb(65,105,225)';
-          // dark velvet dots
-          else ctx.fillStyle = 'rgb(148,0,211)';
+          // white smoke dots
+          else ctx.fillStyle = 'rgb(245,245,245)';
 
           if (svm.alpha[i]>1e-2) ctx.lineWidth = 3; // distinguish support vectors
           else ctx.lineWidth = 1;
