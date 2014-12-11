@@ -32,7 +32,7 @@
     var trainstats;
     var dirty= true;
     var kernelid= 1;
-    var rbfKernelSigma = 0.5;
+    var rbfKernelSigma = 0.05;
 	var peg_lambda = 1e-4;
 	var alpha_tol = 1e-4;
 
@@ -40,7 +40,7 @@
 
       //random initialisation
       for(var i=0; i<N; i++) {
-		data[i] = [randf(-4,4), randf(-4,4)];
+		data[i] = [randn(0,4), randn(0,4)];
 		labels[i] = i % 2 === 0 ? 1 : -1;
 	  }
       retrainSVM();
