@@ -228,7 +228,7 @@
         var logC = ui.value;
         svmC= Math.pow(10, logC);
         $("#creport").text("C = " + svmC.toPrecision(2))
-          .css('color', 'blue');
+          .css('color', '#E6E6FA');
         retrainSVM();
       }
 
@@ -236,7 +236,7 @@
         var logSig = ui.value;
         rbfKernelSigma= Math.pow(10, logSig);
         $("#sigreport").text("RBF Kernel sigma = " + rbfKernelSigma.toPrecision(2))
-          .css('color', 'blue');
+          .css('color', '#E6E6FA');
         if (kernelid==1) {
           retrainSVM();
         }
