@@ -151,7 +151,7 @@
           ctx.stroke();
         }
 
-        ctx.fillStyle= 'rgb(0,0,0)';
+        ctx.fillStyle= 'rgb(245,245,245)';
         ctx.fillText("Converged in " + trainstats.iters + " iterations.", default_value, HEIGHT-30);
         var numsupp=0;
         for (var i=0;i<N;i++) { if(svm.alpha[i] > 1e-5) numsupp++; }
@@ -228,14 +228,14 @@
       function refreshC(event, ui) {
         var logC = ui.value;
         svmC= Math.pow(10, logC);
-        $("#creport").text("C = " + svmC.toPrecision(2))
+        $("#creport").text("C = " + svmC.toPrecision(2));
         retrainSVM();
       }
 
       function refreshSig(event, ui) {
         var logSig = ui.value;
         rbfKernelSigma= Math.pow(10, logSig);
-        $("#sigreport").text("RBF Kernel sigma = " + rbfKernelSigma.toPrecision(2))
+        $("#sigreport").text("RBF Kernel sigma = " + rbfKernelSigma.toPrecision(2));
         if (kernelid==1) {
           retrainSVM();
         }
