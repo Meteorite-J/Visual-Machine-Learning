@@ -297,6 +297,12 @@ canvas{
   margin: 20px auto;
 }
 
+#optsdiv {
+  width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .fluid {
     position: relative;
     padding-bottom: 100%;
