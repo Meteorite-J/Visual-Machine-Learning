@@ -190,6 +190,39 @@
         retrainSVM();
       }
     }
+
+    function reset(){
+        // reset to original data and retrain
+        if(cleared){
+          N = default_value;
+          myinit();
+          cleared = false;
+          return;
+        }
+        data = data.splice(0, default_value);
+        labels = labels.splice(0, default_value);
+        N = 10;
+        retrainSVM();
+      }
+
+      function clearCanvas(){
+        // clear all the points and let the users do their own initialization
+        data = [];
+        labels = [];
+        N = 0;
+        ctx.clearRect(0,0,WIDTH,HEIGHT);
+        /*var density= 4.0;
+        for (var x=0.0; x<=WIDTH; x+= density) {
+          for (var y=0.0; y<=HEIGHT; y+= density) {
+            ctx.fillStyle = 'rgb(150,250,150)';
+            ctx.fillRect(x-density/2-1, y-density-1, density+2, density+2);
+          }
+        }*/
+        dirty= false;
+        cleared = true;
+        //return;
+      }
+
     function keyDown(key){
     }
 
@@ -250,7 +283,10 @@
 <b>'k'</b>: toggle between Linear and Kernels<br />
 <b>'r'</b>: reset<br />
 </p>
-
+<div class="operations">
+  <button class="btn" onclick="reset();">Reset</button>
+  <button class="btn" onclick="clearCanvas();">Clear</button>
+</div>
 <canvas id="NPGcanvas" width="500" height="500"></canvas>
 
 <p><small>Please get a real browser if the 'canvas' tag is not supported in your current one.</small></p>
