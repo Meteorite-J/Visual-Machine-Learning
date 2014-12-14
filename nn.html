@@ -39,6 +39,7 @@
       var mserror;
       //might wanna make this configurable on the ui
       var mserror_tol = 1e-3;
+      var cleared = false;
 
       function myinit() {
 
@@ -125,64 +126,55 @@
         data[N] = [(x - WIDTH / 2) / ss, (y - HEIGHT / 2) / ss];
         labels[N] = shiftPressed ? 1 : -1;
         N++;
-
-        // retrain the svm
-        retrain();
+        train();
       }
 
-      /*function keyUp(key) {
-
-        if (key == 82) { // 'r'
-
-          // reset to original data and retrain
-          data = data.splice(0, 10);
-          labels = labels.splice(0, 10);
-          N = defaultN;
-          myinit();
-          retrain();
-        }
-      }
-
-      function keyDown(key) {}*/
-
-      function reset(){
+      /*function reset(){
         // reset to original data and retrain
           data = data.splice(0, 10);
           labels = labels.splice(0, 10);
           N = defaultN;
           myinit();
-          retrain();
-      }
+          train();
+      }*/
 
-      function config(){
-        var nl=parseInt(prompt("Enter number of hidden layers (default = 2)","2")) || 2;
-        if(nl && nl>0) {
-            ssadd=[2];
-            for(var i=0;i<nl;i++) {
-                var e= parseInt(prompt("Enter size of hidden layer " + (i+1) + ". (default: 10). Warning: setting these too high will blow up your computer. Number of parameters is quadratic in these.", 10)) || 10;
-                ssadd.push(e);
-            }
-            b="ok setting architecture to layers of size ";
-            ssadd.push(1);
-            for(var i=0;i<ssadd.length;i++) {
-                b += ssadd[i] + ", "
-            }
-            alert(b);
-            nn.initialize(ssadd);
+      function reset(){
+        // reset to original data and retrain
+        if(cleared){
+          N = default_value;
+          myinit();
+          cleared = false;
+          return;
         }
+        data = data.splice(0, default_value);
+        labels = labels.splice(0, default_value);
+        N = 10;
+        retrainSVM();
       }
 
-      function showConfigOptions(numHidden){
-        var errorMessage = document.getElementById("message");
-        if(numHidden <= 0)
-          errorMessage.innerHTML = "Invalid number!";
-          //for(var i=0; i<){
-          //}
-        else
-          errorMessage.innerHTML = "You selected: " + numHidden;
-          for (var i = 1; i <= numHidden; i++){
+      function clearCanvas(){
+        // clear all the points and let the users do their own initialization
+        data = [];
+        labels = [];
+        N = 0;
+        ctx.clearRect(0,0,WIDTH,HEIGHT);
+        dirty= false;
+        cleared = true;
+      }
 
-          }
+      function reConfig(){
+        var conf = [2];
+        var hl=parseInt(prompt("Number of hidden layers","2")) || 2;
+        if(hl && hl>0) {
+            for(var i=0;i<hl;i++) {
+                var nodes= parseInt(prompt("Number of neurons in hidden layer " + (i+1), 10)) || 10;
+                conf.push(nodes);
+            }
+            config = conf;
+            config.push(1);
+            init = true;
+            train();
+        }
       }
     </script>
     <title>Neural Network</title>
@@ -198,7 +190,8 @@
           <!--<b>'k'</b>: toggle between Linear and Kernels<br/>-->
           <b>'r'</b>: reset<br/><br/>
           <button class="btn" onclick="reset();">reset</button>
-          <button class="btn" onclick="config();">config</button>
+          <button class="btn" onclick="clearCanvas();">clear</button>
+          <button class="btn" onclick="reConfig();">config</button>
         </p>
         <canvas id="NPGcanvas" width="500" height="500"></canvas>
         <h3><a id="tutorial" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>Tutorial</h3>
