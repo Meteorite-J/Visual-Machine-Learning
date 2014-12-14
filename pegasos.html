@@ -267,18 +267,8 @@
       }
 
       $(function() {
-        // for C parameter
-        $("#slider1").slider({
-          orientation: "horizontal",
-          slide: refreshC,
-          max: 2.0,
-          min: -2.0,
-          step: 0.1,
-          value: 0.0
-        });
-
         // for rbf kernel sigma
-        $("#slider2").slider({
+        $("#slider1").slider({
           orientation: "horizontal",
           slide: refreshSig,
           max: 2.0,
@@ -314,11 +304,7 @@
         <div id="optsdiv">
           <div style="width:230px; float: left; margin-left: 10px; margin-bottom: 20px;">
             <div id="slider1"></div>
-            <br/><span id="creport">C = 1.0</span>
-          </div>
-          <div style="width:230px; float: right; margin-right: 10px; margin-bottom: 20px;">
-            <div id="slider2"></div>
-            <br/><span id="sigreport">RBF Kernel $\sigma$ = 1.0</span>
+            <br/><span id="creport">RBF Kernel $\sigma$ = 1.0</span>
           </div>
         </div>
         <h3><a id="tutorial" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>Tutorial</h3>
