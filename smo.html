@@ -281,13 +281,15 @@
             <ul class="dropdown">
               <li>
                 <a href="#">
-                  <i class=""></i>
                   non-linear
                 </a>
               </li>
             </ul>
           </div>
-          <script type="text/javascript">
+          <button class="btn" onclick="reset();">Reset</button>
+          <button class="btn" onclick="clearCanvas();">Clear</button>
+        </div>
+        <script type="text/javascript">
             function DropDown(el) {
               this.dd = el;
               this.initEvents();
@@ -314,9 +316,6 @@
 
             });
           </script>
-          <button class="btn" onclick="reset();">Reset</button>
-          <button class="btn" onclick="clearCanvas();">Clear</button>
-        </div>
         <canvas id="NPGcanvas" width="500" height="500"></canvas>
         <div id="optsdiv">
           <div style="width:230px; float: left; margin-left: 10px; margin-bottom: 20px;">
