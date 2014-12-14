@@ -18,7 +18,8 @@
       /*This demo includes npg library (notpygamejs) written by Andrej Karpathy. It can
       be found on his Github page (https://github.com/karpathy/notpygamejs). */
 
-      var N = 20;
+      var default_value = 20; //number of data points
+      var N = default_value;
       var data = new Array(N);
       var labels = new Array(N);
       //weights and offset..for linear SVM
@@ -31,6 +32,7 @@
       var rbfKernelSigma = 0.5;
       var peg_lambda = 1e-4;
       var alpha_tol = 1e-2;
+      var cleared = false;
 
       function myinit() {
 
@@ -172,6 +174,18 @@
         if (kernelid === 0) ctx.fillText("Using Linear kernel", 10, HEIGHT - 70);
 
         //ctx.fillText("C = " + svmC.toPrecision(2), 10, HEIGHT - 90);
+        ctx.font="12px Verdana";
+        ctx.fillStyle= 'rgb(245,245,245)';
+        ctx.fillText("Converged in " + trainstats.iters + " iterations.", default_value, HEIGHT-30);
+        var numsupp=0;
+        for (var i=0;i<N;i++) { if(svm.alpha[i] > 1e-5) numsupp++; }
+        ctx.fillText("Number of support vectors: " + numsupp + " / " + N, default_value, HEIGHT-50);
+
+        if(kernelid === 1) ctx.fillText("Using Rbf kernel with sigma = " + rbfKernelSigma.toPrecision(2), default_value, HEIGHT - 70);
+        if(kernelid === 0) ctx.fillText("Using Linear kernel", default_value, HEIGHT - 70);
+
+        ctx.fillText("C = " + svmC.toPrecision(2), default_value, HEIGHT - 90);
+        dirty = false;
         dirty = false;
       }
 
