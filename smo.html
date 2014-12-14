@@ -182,6 +182,12 @@
         }
       }
 
+      function modeToggle{
+        // toggle between kernels: rbf or linear
+        kernelid= 1-kernelid; // toggle 1 and 0
+        retrainSVM();
+      }
+
       function reset(){
         // reset to original data and retrain
         if(cleared){
@@ -277,8 +283,8 @@
 
         <div class="operations">
           <form action="">
-          <input type="radio" name="data-type" value="linear">Linear<br>
-          <input type="radio" name="data-type" value="non-linear">Non-linear (Kernals)
+          <input type="radio" name="data-type" value="linear" onclick="modeToggle();">Linear<br>
+          <input type="radio" name="data-type" value="non-linear" onclick="modeToggle();">Non-linear (Kernals)
           </form>
           <button class="btn" onclick="reset();">Reset</button>
           <button class="btn" onclick="clearCanvas();">Clear</button>
