@@ -276,9 +276,46 @@
         </p>
 
         <div class="operations">
+          <div id="dd" class="dropdown-wrapper">
+            linear
+            <ul class="dropdown">
+              <li>
+                <a href="#">
+                  non-linear
+                </a>
+              </li>
+            </ul>
+          </div>
           <button class="btn" onclick="reset();">Reset</button>
           <button class="btn" onclick="clearCanvas();">Clear</button>
         </div>
+        <script type="text/javascript">
+            function DropDown(el) {
+              this.dd = el;
+              this.initEvents();
+            }
+            DropDown.prototype = {
+              initEvents : function() {
+                var obj = this;
+
+                obj.dd.on('click', function(event){
+                  $(this).toggleClass('active');
+                  event.stopPropagation();
+                }); 
+              }
+            }
+
+            $(function() {
+
+              var dd = new DropDown( $('#dd') );
+
+              $(document).click(function() {
+                // all dropdowns
+                $('.dropdown-wrapper').removeClass('active');
+              });
+
+            });
+          </script>
         <canvas id="NPGcanvas" width="500" height="500"></canvas>
         <div id="optsdiv">
           <div style="width:230px; float: left; margin-left: 10px; margin-bottom: 20px;">
