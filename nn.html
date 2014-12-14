@@ -184,9 +184,9 @@
         <canvas id="NPGcanvas" width="500" height="500"></canvas>
         <form>
           Configurations:<br/>
-          learning rate: <input type="text" value="0.1" onchange="updateLearningRate(this.value);"><p></p><br/>
-          error tolerance: <input type="text" value="1e-3" onchange="updateErrorTolerance(this.value);"><p></p><br/>
-          the number of hidden layers (default: 2): <input type="text" value="2" onchange="showConfigOptions(this.value);"><p id="message"></p><br/>
+          learning rate: <input type="number" value="0.1" onchange="updateLearningRate(this.value);"><p></p><br/>
+          error tolerance: <input type="number" value="1e-3" onchange="updateErrorTolerance(this.value);"><p></p><br/>
+          the number of hidden layers (default: 2): <input type="number" value="2" onchange="showConfigOptions(this.value);"><p id="message"></p><br/>
         </form>
         <h3><a id="tutorial" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>Tutorial</h3>
         <pre class="mathJax">
