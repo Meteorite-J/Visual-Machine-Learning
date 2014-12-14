@@ -141,15 +141,15 @@
       function reset(){
         // reset to original data and retrain
         if(cleared){
-          N = default_value;
+          N = defaultN;
           myinit();
           cleared = false;
           return;
         }
-        data = data.splice(0, default_value);
-        labels = labels.splice(0, default_value);
+        data = data.splice(0, defaultN);
+        labels = labels.splice(0, defaultN);
         N = 10;
-        retrainSVM();
+        train();
       }
 
       function clearCanvas(){
