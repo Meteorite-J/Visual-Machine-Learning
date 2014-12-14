@@ -174,13 +174,16 @@
         retrainSVM();
       }
 
-      function keyUp(key){
+      /*function keyUp(key){
         if(key==75) { // 'k'
           // toggle between kernels: rbf or linear
           kernelid= 1-kernelid; // toggle 1 and 0
           retrainSVM();
         }
-      }
+      }*/
+
+      /*function keyDown(key){
+      }*/
 
       function dataToggle(){
         // toggle between kernels: rbf or linear
@@ -219,10 +222,6 @@
         cleared = true;
         //return;
       }
-
-      function keyDown(key){
-      }
-
 
       // UI stuff
       function refreshC(event, ui) {
