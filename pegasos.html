@@ -184,8 +184,6 @@
         if(kernelid === 1) ctx.fillText("Using Rbf kernel with sigma = " + rbfKernelSigma.toPrecision(2), default_value, HEIGHT - 70);
         if(kernelid === 0) ctx.fillText("Using Linear kernel", default_value, HEIGHT - 70);
 
-        ctx.fillText("C = " + svmC.toPrecision(2), default_value, HEIGHT - 90);
-        dirty = false;
         dirty = false;
       }
 
@@ -259,13 +257,6 @@
       }
 
       // UI stuff
-      function refreshC(event, ui) {
-        var logC = ui.value;
-        svmC = Math.pow(10, logC);
-        $("#creport").text("C = " + svmC.toPrecision(2));
-        retrainSVM();
-      }
-
       function refreshSig(event, ui) {
         var logSig = ui.value;
         rbfKernelSigma = Math.pow(10, logSig);
