@@ -120,8 +120,8 @@ function NPGinit(FPS){
   //canvas element cannot get focus by default. Requires to either set 
   //tabindex to 1 so that it's focusable, or we need to attach listeners
   //to the document. Here we do the latter
-  document.addEventListener('keyup', eventKeyUp, true);
-  document.addEventListener('keydown', eventKeyDown, true);
+  //document.addEventListener('keyup', eventKeyUp, true);
+  //document.addEventListener('keydown', eventKeyDown, true);
   
   setInterval(NPGtick, 1000/FPS);
   
