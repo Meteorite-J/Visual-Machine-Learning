@@ -155,10 +155,11 @@
       }
 
       function showConfigOptions(numHidden){
-        if(numHidden <= 0){
-          var errorMessage = document.getElementById("invalidNumberMessage");
-          errorMessage.appendChild(errorMessage);
-        }
+        var errorMessage = document.getElementById("message");
+        if(numHidden <= 0)
+          errorMessage.innerHTML = "Invalid number!";
+        else
+          errorMessage.innerHTML = "You selected: ";
       }
     </script>
     <title>Neural Network</title>
@@ -178,7 +179,7 @@
         <canvas id="NPGcanvas" width="500" height="500"></canvas>
         <form>
           Configuration<br/>
-          the number of hidden layers (default: 2): <input type="text" value="2" onchange="showConfigOptions(this.value);"><p id="invalidNumberMessage"></p><br/>
+          the number of hidden layers (default: 2): <input type="text" value="2" onchange="showConfigOptions(this.value);"><p id="message"></p><br/>
           <input type="submit" value="Submit">
         </form>
         <h3><a id="tutorial" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>Tutorial</h3>
