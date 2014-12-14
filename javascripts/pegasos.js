@@ -89,7 +89,7 @@ var pegasos = (function(){
 			if(idleCount == maxIdle) {
 				//Stop
 				iter--;
-				continue;
+				break;
 			}
 			//Choose an instance at random
 			var randInt = randi(0, this.N);
