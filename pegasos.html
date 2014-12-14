@@ -3,87 +3,90 @@
   <head>
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    
     <link rel="stylesheet" type="text/css" href="javascripts/jqueryui/css/ui-lightness/jquery-ui-1.8.21.custom.css" media="screen">
     <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet_iframe.css" media="screen">
     <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen">
-
     <script type="text/javascript" src="javascripts/jqueryui/js/jquery-1.7.2.min.js"></script>
     <script type="text/javascript" src="javascripts/jqueryui/js/jquery-ui-1.8.21.custom.min.js"></script>
     <script src="./javascripts/npg/npgmain.js"></script>
     <script type="text/x-mathjax-config">
-    MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+      MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
     </script>
     <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
     <script src="./javascripts/pegasos.js"></script>
     <script type="text/javascript">
+      /*This demo includes npg library (notpygamejs) written by Andrej Karpathy. It can
+      be found on his Github page (https://github.com/karpathy/notpygamejs). */
 
-    /*
-    This demo includes npg library (notpygamejs) written by Andrej Karpathy. It can
-    be found on his Github page (https://github.com/karpathy/notpygamejs). 
-    */
+      var default_value = 20; //number of data points
+      var N = default_value;
+      var data = new Array(N);
+      var labels = new Array(N);
+      //weights and offset..for linear SVM
+      var wx, wy, b;
+      var ss = 50.0;
+      var svm = new pegasos.SVM();
+      var trainstats;
+      var dirty = true;
+      var kernelid = 1;
+      var rbfKernelSigma = 0.5;
+      var peg_lambda = 1e-4;
+      var alpha_tol = 1e-2;
+      var cleared = false;
 
-    var N= 20;
-    var data = new Array(N);
-    var labels= new Array(N);
-	//weights and offset..for linear SVM
-    var wx, wy, b; 
-    var ss= 50.0; 
-    var svm= new pegasos.SVM();
-    var trainstats;
-    var dirty= true;
-    var kernelid= 1;
-    var rbfKernelSigma = 0.5;
-	var peg_lambda = 1e-4;
-	var alpha_tol = 1e-2;
+      function myinit() {
 
-    function myinit(){
-
-      //random normal distribution initialisation
-      for(var i=0; i<N; i++) {
-		data[i] = [randn(0,4), randn(0,4)];
-		labels[i] = i % 2 === 0 ? 1 : -1;
-	  }
-      retrainSVM();
-    }
-
-    function retrainSVM() {
-
-      if(kernelid === 1) {
-        trainstats= svm.train(data, labels, { kernel: 'rbf', rbfsigma: rbfKernelSigma, lambda: peg_lambda, alphatol: alpha_tol});
-      }
-      if(kernelid === 0) {
-        trainstats= svm.train(data, labels, { kernel: 'linear' , lambda: peg_lambda});
-        wx = svm.w[1];
-		wy = svm.w[2];
-		b = svm.w[0];
+        //random normal distribution initialisation
+        for (var i = 0; i < N; i++) {
+          data[i] = [randn(0, 4), randn(0, 4)];
+          labels[i] = i % 2 === 0 ? 1 : -1;
+        }
+        retrainSVM();
       }
 
-      dirty= true; // to redraw screen
-    }
+      function retrainSVM() {
 
-    function update(){
-    }
+        if (kernelid === 1) {
+          trainstats = svm.train(data, labels, {
+            kernel: 'rbf',
+            rbfsigma: rbfKernelSigma,
+            lambda: peg_lambda,
+            alphatol: alpha_tol
+          });
+        }
+        if (kernelid === 0) {
+          trainstats = svm.train(data, labels, {
+            kernel: 'linear',
+            lambda: peg_lambda
+          });
+          wx = svm.w[1];
+          wy = svm.w[2];
+          b = svm.w[0];
+        }
 
-    function draw(){
-        if(!dirty) return;
+        dirty = true; // to redraw screen
+      }
 
-        ctx.clearRect(0,0,WIDTH,HEIGHT);
+      function update() {}
+
+      function draw() {
+        if (!dirty) return;
+
+        ctx.clearRect(0, 0, WIDTH, HEIGHT);
 
         // draw the decision boundary
-        var density= 4.0;
-		//predict every point in the grid
-		//and fill with the appropriate color
-        for(var x=0.0; x<=WIDTH; x+= density) {
-          for(var y=0.0; y<=HEIGHT; y+= density) {
-            var dec= svm.predictOne([(x-WIDTH/2)/ss, (y-HEIGHT/2)/ss]);
-            if(N===1) dec = labels[0];
+        var density = 4.0;
+        //predict every point in the grid
+        //and fill with the appropriate color
+        for (var x = 0.0; x <= WIDTH; x += density) {
+          for (var y = 0.0; y <= HEIGHT; y += density) {
+            var dec = svm.predictOne([(x - WIDTH / 2) / ss, (y - HEIGHT / 2) / ss]);
+            if (N === 1) dec = labels[0];
             // black region
-            if (dec>0) ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+            if (dec > 0) ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
             // white region
             else ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
-            ctx.fillRect(x-density/2-1, y-density-1, density+2, density+2);
+            ctx.fillRect(x - density / 2 - 1, y - density - 1, density + 2, density + 2);
           }
         }
 
@@ -92,115 +95,128 @@
         // white
         ctx.strokeStyle = 'rgb(255,255,255)';
         ctx.lineWidth = 1;
-		// move to middle left
-        ctx.moveTo(0, HEIGHT/2);
-		// draw x axis
-        ctx.lineTo(WIDTH, HEIGHT/2);
-		// move to top middle
-        ctx.moveTo(WIDTH/2, 0);
-		//draw y axis
-        ctx.lineTo(WIDTH/2, HEIGHT);
+        // move to middle left
+        ctx.moveTo(0, HEIGHT / 2);
+        // draw x axis
+        ctx.lineTo(WIDTH, HEIGHT / 2);
+        // move to top middle
+        ctx.moveTo(WIDTH / 2, 0);
+        //draw y axis
+        ctx.lineTo(WIDTH / 2, HEIGHT);
         ctx.stroke();
 
         // draw data points. Draw support vectors larger
         ctx.strokeStyle = 'rgb(245, 245, 245)';
-        for(var i=0;i<N;i++) {
-			//check label : red or green
+        for (var i = 0; i < N; i++) {
+          //check label : red or green
           // black dots
-          if (labels[i]==1) ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+          if (labels[i] == 1) ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
           // white dots
           else ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-			
-          if(svm.alpha[i]>alpha_tol) ctx.lineWidth = 3; // distinguish support vectors
+
+          if (svm.alpha[i] > alpha_tol) ctx.lineWidth = 3; // distinguish support vectors
           else ctx.lineWidth = 1;
 
-          drawCircle(data[i][0]*ss+WIDTH/2, data[i][1]*ss+HEIGHT/2, Math.floor(((svm.alpha[i] > alpha_tol) ? (svm.alpha[i]*N) : 1)*5));
+          drawCircle(data[i][0] * ss + WIDTH / 2, data[i][1] * ss + HEIGHT / 2, Math.floor(((svm.alpha[i] > alpha_tol) ? (svm.alpha[i] * N) : 1) * 5));
         }
 
         // if linear kernel, draw decision boundary and margin lines
-        if(kernelid == 0) {
+        if (kernelid == 0) {
 
-          var xs= [-5, 5];
-          var ys= [0, 0];
-          ys[0]= (-b - wx*xs[0])/wy;
-          ys[1]= (-b - wx*xs[1])/wy;
+          var xs = [-5, 5];
+          var ys = [0, 0];
+          ys[0] = (-b - wx * xs[0]) / wy;
+          ys[1] = (-b - wx * xs[1]) / wy;
           ctx.fillStyle = 'rgb(0,0,0)';
           ctx.lineWidth = 1;
           ctx.beginPath();
           // wx+b=0 line
-          ctx.moveTo(xs[0]*ss+WIDTH/2, ys[0]*ss+HEIGHT/2);
-          ctx.lineTo(xs[1]*ss+WIDTH/2, ys[1]*ss+HEIGHT/2);
+          ctx.moveTo(xs[0] * ss + WIDTH / 2, ys[0] * ss + HEIGHT / 2);
+          ctx.lineTo(xs[1] * ss + WIDTH / 2, ys[1] * ss + HEIGHT / 2);
           // wx+b=1 margin
-          ctx.moveTo(xs[0]*ss+WIDTH/2, (ys[0]-1.0/wy)*ss+HEIGHT/2);
-          ctx.lineTo(xs[1]*ss+WIDTH/2, (ys[1]-1.0/wy)*ss+HEIGHT/2);
+          ctx.moveTo(xs[0] * ss + WIDTH / 2, (ys[0] - 1.0 / wy) * ss + HEIGHT / 2);
+          ctx.lineTo(xs[1] * ss + WIDTH / 2, (ys[1] - 1.0 / wy) * ss + HEIGHT / 2);
           // wx+b=-1 margin
-          ctx.moveTo(xs[0]*ss+WIDTH/2, (ys[0]+1.0/wy)*ss+HEIGHT/2);
-          ctx.lineTo(xs[1]*ss+WIDTH/2, (ys[1]+1.0/wy)*ss+HEIGHT/2);
+          ctx.moveTo(xs[0] * ss + WIDTH / 2, (ys[0] + 1.0 / wy) * ss + HEIGHT / 2);
+          ctx.lineTo(xs[1] * ss + WIDTH / 2, (ys[1] + 1.0 / wy) * ss + HEIGHT / 2);
           ctx.stroke();
 
           // draw margin lines for support vectors. 
-          for(var i=0;i<N;i++) {
+          for (var i = 0; i < N; i++) {
             //if(svm.alpha[i]< alpha_tol) continue;
-            if(labels[i]==1) {
-              ys[0]= (1 -b - wx*xs[0])/wy;
-              ys[1]= (1 -b - wx*xs[1])/wy;
+            if (labels[i] == 1) {
+              ys[0] = (1 - b - wx * xs[0]) / wy;
+              ys[1] = (1 - b - wx * xs[1]) / wy;
             } else {
-              ys[0]= (-1 -b - wx*xs[0])/wy;
-              ys[1]= (-1 -b - wx*xs[1])/wy;
+              ys[0] = (-1 - b - wx * xs[0]) / wy;
+              ys[1] = (-1 - b - wx * xs[1]) / wy;
             }
-            var u= (data[i][0]-xs[0])*(xs[1]-xs[0])+(data[i][1]-ys[0])*(ys[1]-ys[0]);
-            u = u/((xs[0]-xs[1])*(xs[0]-xs[1])+(ys[0]-ys[1])*(ys[0]-ys[1]));
-            var xi= xs[0]+u*(xs[1]-xs[0]);
-            var yi= ys[0]+u*(ys[1]-ys[0]);
-            ctx.moveTo(data[i][0]*ss+WIDTH/2, data[i][1]*ss+HEIGHT/2);
-            ctx.lineTo(xi*ss+WIDTH/2, yi*ss+HEIGHT/2);
+            var u = (data[i][0] - xs[0]) * (xs[1] - xs[0]) + (data[i][1] - ys[0]) * (ys[1] - ys[0]);
+            u = u / ((xs[0] - xs[1]) * (xs[0] - xs[1]) + (ys[0] - ys[1]) * (ys[0] - ys[1]));
+            var xi = xs[0] + u * (xs[1] - xs[0]);
+            var yi = ys[0] + u * (ys[1] - ys[0]);
+            ctx.moveTo(data[i][0] * ss + WIDTH / 2, data[i][1] * ss + HEIGHT / 2);
+            ctx.lineTo(xi * ss + WIDTH / 2, yi * ss + HEIGHT / 2);
           }
           ctx.stroke();
         }
 
-        ctx.font="12px Verdana";
-        ctx.fillStyle= 'rgb(245,245,245)';
-        ctx.fillText("Converged in " + trainstats.iters + " iterations.", 10, HEIGHT-30);
+        ctx.font = "12px Verdana";
+        ctx.fillStyle = 'rgb(245,245,245)';
+        if(kernelid === 1)
+        ctx.fillText("Converged in " + trainstats.iters + " iterations.", 10, HEIGHT - 30);
+        /*var numsupp = 0;
+        for (var i = 0; i < N; i++) {
+          if (svm.alpha[i] > alpha_tol) numsupp++;
+        }
+        ctx.fillText("Number of support vectors: " + numsupp + " / " + N, 10, HEIGHT - 50);*/
 
-        if(kernelid === 1) ctx.fillText("Using Rbf kernel with sigma = " + rbfKernelSigma.toPrecision(2), 10, HEIGHT - 70);
-        if(kernelid === 0) ctx.fillText("Using Linear kernel", 10, HEIGHT - 70);
+        if (kernelid === 1) ctx.fillText("Using Rbf kernel with sigma = " + rbfKernelSigma.toPrecision(2), 10, HEIGHT - 70);
+        if (kernelid === 0) ctx.fillText("Using Linear kernel", 10, HEIGHT - 70);
 
-        //ctx.fillText("C = " + svmC.toPrecision(2), 10, HEIGHT - 90);
-		dirty = false;
-    }
+        dirty = false;
+      }
 
-    function mouseClick(x, y, shiftPressed){
+      function mouseClick(x, y, shiftPressed) {
 
-      // add datapoint at location of click
-      data[N] = [(x-WIDTH/2)/ss, (y-HEIGHT/2)/ss];
-      labels[N] = shiftPressed ? 1 : -1;
-      N += 1;
+        // add datapoint at location of click
+        data[N] = [(x - WIDTH / 2) / ss, (y - HEIGHT / 2) / ss];
+        labels[N] = shiftPressed ? 1 : -1;
+        N += 1;
 
-      // retrain the svm
-      retrainSVM();
-    }
-
-    function keyUp(key){
-
-      if(key==82) { // 'r'
-
-        // reset to original data and retrain
-        data= data.splice(0, 10);
-        labels= labels.splice(0, 10);
-        N= 10;
+        // retrain the svm
         retrainSVM();
       }
-      if(key==75) { // 'k'
 
+      /* function keyUp(key) {
+
+        if (key == 82) { // 'r'
+
+          // reset to original data and retrain
+          data = data.splice(0, 10);
+          labels = labels.splice(0, 10);
+          N = 10;
+          retrainSVM();
+        }
+        if (key == 75) { // 'k'
+
+          // toggle between kernels: rbf or linear
+          kernelid = 1 - kernelid; // toggle 1 and 0
+          retrainSVM();
+        }
+      }*/
+
+      /*function keyDown(key) {}*/
+
+      function dataToggle(){
         // toggle between kernels: rbf or linear
         kernelid= 1-kernelid; // toggle 1 and 0
         retrainSVM();
       }
-    }
 
-    function reset(){
+      function reset() {
         // reset to original data and retrain
-        if(cleared){
+        if (cleared) {
           N = default_value;
           myinit();
           cleared = false;
@@ -212,12 +228,12 @@
         retrainSVM();
       }
 
-      function clearCanvas(){
+      function clearCanvas() {
         // clear all the points and let the users do their own initialization
         data = [];
         labels = [];
         N = 0;
-        ctx.clearRect(0,0,WIDTH,HEIGHT);
+        ctx.clearRect(0, 0, WIDTH, HEIGHT);
         /*var density= 4.0;
         for (var x=0.0; x<=WIDTH; x+= density) {
           for (var y=0.0; y<=HEIGHT; y+= density) {
@@ -225,45 +241,24 @@
             ctx.fillRect(x-density/2-1, y-density-1, density+2, density+2);
           }
         }*/
-        dirty= false;
+        dirty = false;
         cleared = true;
         //return;
       }
 
-    function keyDown(key){
-    }
-
-
-    // UI stuff
-    function refreshC(event, ui) {
-      var logC = ui.value;
-      svmC= Math.pow(10, logC);
-      $("#creport").text("C = " + svmC.toPrecision(2));
-      retrainSVM();
-    }
-
-    function refreshSig(event, ui) {
-      var logSig = ui.value;
-      rbfKernelSigma= Math.pow(10, logSig);
-      $("#sigreport").text("RBF Kernel sigma = " + rbfKernelSigma.toPrecision(2));
-      if(kernelid==1) {
-        retrainSVM();
+      // UI stuff
+      function refreshSig(event, ui) {
+        var logSig = ui.value;
+        rbfKernelSigma = Math.pow(10, logSig);
+        $("#sigreport").text("RBF Kernel sigma = " + rbfKernelSigma.toPrecision(2));
+        if (kernelid == 1) {
+          retrainSVM();
+        }
       }
-    }
 
-    $(function() {
-        // for C parameter
-        $("#slider1").slider({
-          orientation: "horizontal",
-          slide: refreshC,
-          max: 2.0,
-          min: -2.0,
-          step: 0.1,
-          value: 0.0
-        });
-
+      $(function() {
         // for rbf kernel sigma
-        $("#slider2").slider({
+        $("#slider1").slider({
           orientation: "horizontal",
           slide: refreshSig,
           max: 2.0,
@@ -271,43 +266,46 @@
           step: 0.1,
           value: 0.0
         });
-    });
+      });
     </script>
-
     <title>Visual-machine-learning by Metoerite</title>
   </head>
-
   <body onLoad="NPGinit(10);">
-
     <div class="container">
       <section id="main_content">
         <h3><a class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>Support Vector Machine Using the PEGASOS Algorithm</h3>
-
-<p>Instructions:</p>
-<p>
-<b>mouse click</b>: add white data points<br />
-<b>shift + mouse click</b>: add black data points<br />
-<b>'k'</b>: toggle between Linear and Kernels<br />
-</p>
-<div class="operations">
-  <button class="btn" onclick="reset();">Reset</button>
-  <button class="btn" onclick="clearCanvas();">Clear</button>
-</div>
-<canvas id="NPGcanvas" width="500" height="500"></canvas>
-<div id="optsdiv" style="width: 500px; margin-left: auto; margin-right:auto;">
-  <div style="width:230px; float: left; margin-left: 10px; margin-bottom: 20px;"><div id="slider1"></div><br/><span id="creport">C = 1.0</span></div>
-  <div style="width:230px; float: right; margin-right: 10px; margin-bottom: 20px;"><div id="slider2"></div><br/><span id="sigreport">RBF Kernel $\sigma$ = 1.0</span></div>
-</div>
-
-<h3><a id="tutorial" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>Tutorial</h3>
-
-<pre><code>Corresponding code block
-</code></pre>
-
-<p></p>
+        <p>Instructions:</p>
+        <p>
+          <b>mouse click</b>: add white data points<br/><br/>
+          <b>shift + mouse click</b>: add black data points<br/><br/>
+          <b>clear</b>: clear the canvas area so you can design your own setting<br/><br/>
+          <b>reset</b>: remove the points added by mouse clicks $\&$ restore the original layout<br/><br/>
+          <b>clear -> reset</b>: regenerate random data points<br/><br/>
+        </p>
+        <div class="operations">
+          <form>
+            <input type="radio" name="data-type" value="linear" onchange="dataToggle();">Linear<br>
+            <input type="radio" name="data-type" value="non-linear" checked onchange="dataToggle();">Non-linear (Kernals)
+          </form>
+          <button class="btn" onclick="reset();">reset</button>
+          <button class="btn" onclick="clearCanvas();">clear</button>
+        </div>
+        <canvas id="NPGcanvas" width="500" height="500"></canvas>
+        <div id="optsdiv">
+          <div style="width:230px; float: left; margin-left: 10px; margin-bottom: 20px;">
+            <div id="slider1"></div>
+            <br/><span id="sigreport">RBF Kernel $\sigma$ = 1.0</span>
+          </div>
+          <div style="width:230px; float: right; margin-right: 10px; margin-bottom: 20px;">
+          </div>
+        </div>
+        <div class="container" style="margin-top: 105px;">
+          <h3><a id="tutorial" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>Tutorial</h3>
+          <pre>
+            <code>Corresponding code block</code>
+          </pre>
+        </div>
       </section>
     </div>
-
-
   </body>
 </html>

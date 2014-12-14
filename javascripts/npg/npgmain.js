@@ -98,15 +98,15 @@ function eventClick(e) {
 
 //event codes can be found here:
 //http://www.aspdotnetfaq.com/Faq/What-is-the-list-of-KeyCodes-for-JavaScript-KeyDown-KeyPress-and-KeyUp-events.aspx
-function eventKeyUp(e) {
+/*function eventKeyUp(e) {
   var keycode = ('which' in e) ? e.which : e.keyCode;
   keyUp(keycode);
-}
+}*/
 
-function eventKeyDown(e) {
+/*function eventKeyDown(e) {
   var keycode = ('which' in e) ? e.which : e.keyCode;
   keyDown(keycode);
-}
+}*/
 
 function NPGinit(FPS){
   //takes frames per secont to run at
@@ -120,8 +120,8 @@ function NPGinit(FPS){
   //canvas element cannot get focus by default. Requires to either set 
   //tabindex to 1 so that it's focusable, or we need to attach listeners
   //to the document. Here we do the latter
-  document.addEventListener('keyup', eventKeyUp, true);
-  document.addEventListener('keydown', eventKeyDown, true);
+  //document.addEventListener('keyup', eventKeyUp, true);
+  //document.addEventListener('keydown', eventKeyDown, true);
   
   setInterval(NPGtick, 1000/FPS);
   

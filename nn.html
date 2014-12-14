@@ -3,10 +3,8 @@
   <head>
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-
     <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet_iframe.css" media="screen">
     <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen">
-
     <script type="text/javascript" src="javascripts/jqueryui/js/jquery-1.7.2.min.js"></script>
     <script type="text/javascript" src="javascripts/jqueryui/js/jquery-ui-1.8.21.custom.min.js"></script>
     <script src="./javascripts/npg/npgmain.js"></script>
@@ -19,73 +17,76 @@
       });
     </script>
     <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
     <script src="./javascripts/neuralnet.js"></script>
     <script type="text/javascript">
       /*
       This demo includes npg library (notpygamejs) written by Andrej Karpathy. It can
       be found on his Github page (https://github.com/karpathy/notpygamejs). 
       */
-
-      var defaultN = 20; 
-	  N = defaultN;
+      var defaultN = 20;
+      N = defaultN;
       var data = new Array(N);
-      var labels= new Array(N);
-      var ss= 50.0; // scaling factor for drawing
-      var trainer= new neuralnet.NN();
-      var dirty= true;
+      var labels = new Array(N);
+      var ss = 50.0; // scaling factor for drawing
+      var trainer = new neuralnet.NN();
+      var dirty = true;
       var learningRate = 0.1;
-	  //To set, create an array with the num j of hidden layers the user enters
-	  //config = [2, (num of nodes on 1st input layer),.....,(num of nodes on jth input layer), 1]
-	  var config = null;
-	  //Set init to true if the config changes
-	  var init = true;
-	  var mserror;
-	  //might wanna make this configurable on the ui
-	  var mserror_tol = 1e-3;
-	  
-      function myinit(){
+      //To set, create an array with the num j of hidden layers the user enters
+      //config = [2, (num of nodes on 1st input layer),.....,(num of nodes on jth input layer), 1]
+      var config = null;
+      //Set init to true if the config changes
+      var init = true;
+      var mserror;
+      //might wanna make this configurable on the ui
+      var mserror_tol = 1e-3;
+      var cleared = false;
+
+      function myinit() {
 
         //random normal distribution initialisation
-		for(var i=0; i<N; i++) {
-		data[i] = [randn(0,4), randn(0,4)];
-		labels[i] = i % 2;
-		}
+        for (var i = 0; i < N; i++) {
+          data[i] = [randn(0, 4), randn(0, 4)];
+          labels[i] = i % 2;
+        }
         train();
       }
 
       function train() {
-	    for(var i=0; i<100; i++) {
-			mserror = trainer.train(data, labels, {learningRate: learningRate, config: config, init: init});
-			init = false;
-		}
-        dirty= true;
+        for (var i = 0; i < 100; i++) {
+          mserror = trainer.train(data, labels, {
+            learningRate: learningRate,
+            config: config,
+            init: init
+          });
+          init = false;
+        }
+        dirty = true;
       }
 
-      function update(){
-		if(mserror > mserror_tol) {
-			train();
-		}
+      function update() {
+        if (mserror > mserror_tol) {
+          train();
+        }
       }
 
-      function draw(){
-          if(!dirty) return;
+      function draw() {
+        if (!dirty) return;
 
-        ctx.clearRect(0,0,WIDTH,HEIGHT);
+        ctx.clearRect(0, 0, WIDTH, HEIGHT);
 
         // draw the decision boundary
-        var density= 4.0;
-		//predict every point in the grid
-		//and fill with the appropriate color
-        for(var x=0.0; x<=WIDTH; x+= density) {
-          for(var y=0.0; y<=HEIGHT; y+= density) {
-            var dec= trainer.predict([(x-WIDTH/2)/ss, (y-HEIGHT/2)/ss]);
-            if(N===1) dec = labels[0];
+        var density = 4.0;
+        //predict every point in the grid
+        //and fill with the appropriate color
+        for (var x = 0.0; x <= WIDTH; x += density) {
+          for (var y = 0.0; y <= HEIGHT; y += density) {
+            var dec = trainer.predict([(x - WIDTH / 2) / ss, (y - HEIGHT / 2) / ss]);
+            if (N === 1) dec = labels[0];
             // black region
-            if (dec>0) ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+            if (dec > 0) ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
             // white region
             else ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
-            ctx.fillRect(x-density/2-1, y-density-1, density+2, density+2);
+            ctx.fillRect(x - density / 2 - 1, y - density - 1, density + 2, density + 2);
           }
         }
 
@@ -94,85 +95,110 @@
         // white
         ctx.strokeStyle = 'rgb(255,255,255)';
         ctx.lineWidth = 1;
-		// move to middle left
-        ctx.moveTo(0, HEIGHT/2);
-		// draw x axis
-        ctx.lineTo(WIDTH, HEIGHT/2);
-		// move to top middle
-        ctx.moveTo(WIDTH/2, 0);
-		//draw y axis
-        ctx.lineTo(WIDTH/2, HEIGHT);
+        // move to middle left
+        ctx.moveTo(0, HEIGHT / 2);
+        // draw x axis
+        ctx.lineTo(WIDTH, HEIGHT / 2);
+        // move to top middle
+        ctx.moveTo(WIDTH / 2, 0);
+        //draw y axis
+        ctx.lineTo(WIDTH / 2, HEIGHT);
         ctx.stroke();
 
         // draw data points.
         ctx.strokeStyle = 'rgb(245, 245, 245)';
-        for(var i=0;i<N;i++) {
-			//check label
+        for (var i = 0; i < N; i++) {
+          //check label
           // black dots
-          if (labels[i]==1) ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+          if (labels[i] == 1) ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
           // white dots
           else ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-			
+
           ctx.lineWidth = 2;
-          drawCircle(data[i][0]*ss+WIDTH/2, data[i][1]*ss+HEIGHT/2, 5);
+          drawCircle(data[i][0] * ss + WIDTH / 2, data[i][1] * ss + HEIGHT / 2, 5);
         }
-		dirty = false;
+        dirty = false;
       }
 
-      function mouseClick(x, y, shiftPressed){
+      function mouseClick(x, y, shiftPressed) {
 
         // add datapoint at location of click
-        data[N] = [(x-WIDTH/2)/ss, (y-HEIGHT/2)/ss];
+        data[N] = [(x - WIDTH / 2) / ss, (y - HEIGHT / 2) / ss];
         labels[N] = shiftPressed ? 1 : -1;
         N++;
-
-        // retrain the svm
-        retrain();
+        train();
       }
 
-      function keyUp(key){
+      /*function reset(){
+        // reset to original data and retrain
+          data = data.splice(0, 10);
+          labels = labels.splice(0, 10);
+          N = defaultN;
+          myinit();
+          train();
+      }*/
 
-        if(key==82) { // 'r'
+      function reset(){
+        // reset to original data and retrain
+        if(cleared){
+          N = defaultN;
+          myinit();
+          cleared = false;
+          return;
+        }
+        data = data.splice(0, defaultN);
+        labels = labels.splice(0, defaultN);
+        N = 10;
+        train();
+      }
 
-          // reset to original data and retrain
-          data= data.splice(0, 10);
-          labels= labels.splice(0, 10);
-          N= defaultN;
-		  myinit();
-          retrain();
+      function clearCanvas(){
+        // clear all the points and let the users do their own initialization
+        data = [];
+        labels = [];
+        N = 0;
+        ctx.clearRect(0,0,WIDTH,HEIGHT);
+        dirty= false;
+        cleared = true;
+      }
+
+      function reConfig(){
+        var conf = [2];
+        var hl=parseInt(prompt("Number of hidden layers","2")) || 2;
+        if(hl && hl>0) {
+            for(var i=0;i<hl;i++) {
+                var nodes= parseInt(prompt("Number of neurons in hidden layer " + (i+1), 10)) || 10;
+                conf.push(nodes);
+            }
+            config = conf;
+            config.push(1);
+            init = true;
+            train();
         }
       }
-	  
-	function keyDown(key){
-    }
     </script>
-
     <title>Neural Network</title>
   </head>
-
   <body onLoad="NPGinit(10);">
     <div class="container">
       <section id="main_content">
         <h3><a class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>Neural Network</h3>
-
-        <p>Instructions:</p> 
+        <p>Instructions:</p>
         <p>
-        <b>mouse click</b>: add red data point<br />
-        <b>shift + mouse click</b>: add green data point<br />
-        <b>'k'</b>: toggle between Linear and Kernels<br />
-        <b>'r'</b>: reset<br />
+          <b>mouse click</b>: add red data point<br/><br/>
+          <b>shift + mouse click</b>: add green data point<br/><br/>
+          <!--<b>'k'</b>: toggle between Linear and Kernels<br/>-->
+          <b>'r'</b>: reset<br/><br/>
+          <button class="btn" onclick="reset();">reset</button>
+          <button class="btn" onclick="clearCanvas();">clear</button>
+          <button class="btn" onclick="reConfig();">config</button>
         </p>
-
         <canvas id="NPGcanvas" width="500" height="500"></canvas>
-
         <h3><a id="tutorial" class="anchor" aria-hidden="true"><span class="octicon octicon-link"></span></a>Tutorial</h3>
-
         <pre class="mathJax">
           $x \ne y$
         </pre>
       </section>
     </div>
-
-
   </body>
 </html>
