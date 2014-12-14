@@ -308,12 +308,12 @@ canvas{
   background: none;
 }
 
-/*.fluid {
+.fluid {
     position: relative;
     padding-bottom: 100%;
     overflow: auto;
     clear: both;
-}*/
+}
 
 iframe {
     overflow: hidden;
