@@ -21,6 +21,10 @@
 \usepackage{amssymb}
 \usepackage{hyperref}
 \usepackage{bbm}
+\usepackage[T1]{fontenc}
+\usepackage{xcolor}
+\usepackage{tabu}
+\usepackage{colortbl}
 
 \DeclareMathOperator*{\argmax}{arg\,max}
 
@@ -137,6 +141,15 @@ The user is able to switch from a linear SVM to using a kernel and the model is 
 
 It is also possible to vary the value of the parameter of the RBF kernel $\sigma$, which has a big effect on the shape of the decision boundary. By the definition of the kernel, small values of $\sigma$ will make it such that only points close to each other will affect prediction because the value of the kernel will be close to zero for points far from each other. The model will look to be overfitting the data. For large values of $\sigma$, we get smooth boundaries that mis-classifies points, tending towards a linear classifier.
 
+\subsection{Results}
+\begin{figure}
+%\includegraphics[scale=.1]{images/Intro.PNG}
+\fbox{\includegraphics[scale = .2]{images/PEGASOS-Kernel.PNG}}
+\fbox{\includegraphics[scale=.2]{images/PEGASOS-Linear.PNG}}
+\caption{Sample output}
+\label{fig:intro}
+\end{figure}
+
 \section{SMO}
 
 \subsection{Background}
@@ -145,23 +158,21 @@ SMO is one of the most popular algorithms for training SVMs. It tackles the dual
 
 The full SMO algorithm contains many optimizations designed to speed up the algorithm on large datasets and ensure that the algorithm converges even under degenerate conditions. The SMO we present is a much simpler version.
 
-\multicolfloat{1}{2}{\centering
-                     \includegraphics{cat.eps}
-                     \captionof{figure}{A test}
-                    }
-\begin{figure} 
- \includegraphics{fig1} 
- \includegraphics{fig2} 
-\end{figure}
+%\multicolfloat{1}{2}{\centering
+    %                 \includegraphics{cat.eps}
+        %             \captionof{figure}{A test}
+   %                 }
+%\begin{figure} 
+ %\includegraphics{fig1} 
+ %\includegraphics{fig2} 
+%\end{figure}
 \section{ANN}
 
 \subsection{Background}
 
-In machine learning, ANNs are a family of statistical learning algorithms and are used to estimate or approximate functions. An Artificial Neural Network (ANN) can be regard as an information processing paradigm that is inspired by the way biological nervous systems, such as the brain, process information.  The key element of this paradigm is the novel structure of the information processing system. It is composed of a large number of highly interconnected processing elements ("neurons") working in unison to solve specific problems. ANNs, like people, learn by example. Learning in biological systems involves adjustments to the synaptic connections that exist between the neurons, and this is true of ANNs as well. Simulations of ANNs appear to be a recent development. However, this field was established before the advent of computers, and has survived at least one major setback and several eras.
+In machine learning, ANNs are a family of statistical learning algorithms and are used to estimate or approximate functions. An Artificial Neural Network (ANN) can be regarded as an information processing paradigm that is inspired by the way biological nervous systems, such as the brain, process information.  The key element of this paradigm is the novel structure of the system. It is composed of a large number of highly interconnected nodes ("neurons") in different layers working together to produce a final output.  This field was established before the advent of computers, and has survived at least one major setback and several eras.
 
-Neural networks are remarkable when it comes to derive meaning from complicated (sometimes imprecise) data. They are often used to detect trends and extract patterns that are too complex to be noticed by normal algorithms. They have an ability to learn how to do tasks based on the data given for training or initial experience. Also, ANN computations can be carried out in parallel, and special hardware devices are being designed to take advantage of this. Modern applications of ANNs are various, such as classification, data processing (clustering, filtering...), regression analysis, etc. We are going to introduce one of the easiest neural networks - the feedforward neural network.
-
-A neural network is created by hooking together many of the "neurons" we've introduced. Each of the neurons usually have multiple inputs and one output. The commonest type of artificial neural network consists of three layers of such neurons: a layer of "input" units is connected to a layer of "hidden" units, which is connected to a layer of "output" units.
+We used one of the easiest neural networks - the feedforward neural network. The key distinction here is that information moves only in one direction in the network. We have a layer of "input" units which is connected to a hierarchy of layers of "hidden" units, the last of which is connected to a layer of "output" units. The network approximates a function by assigning weights to each node for the data it receives from the nodes in the layer before it. The sum of the products of the weights and inputs is taken for each node and if the value is up to a certain threshold, the node is activated. The function that implements this is called the activation function. We use a sigmoid function to achieve that here. This is also used at the final layer to decide the class for the input data in our classification problem.
 
 \subsection{Implementation}
 \label{sect:pdf}
@@ -188,12 +199,29 @@ $decision = (y > 0.5) ? 1:0$
 
 \subsection{Result}
 The default configuration of out neural network is 2-10-10-1: 2 inputs (x and y coordinates), 2 layers of 10 hidden neurons each, and
-\section*{Acknowledgments}
 
+\section{Comparison To Proposal}
 
-% Up to two (2) additional pages may be purchased from ACL at the
-% price of \$250 per page; please contact the publication chairs above
-% for more information about this option.
+\taburowcolors[2]{white .. black!20}
+
+\sffamily\footnotesize
+\tabulinesep=6pt
+\begin{tabu}{|>{\cellcolor{black!60}\color{white}}r|X[cm]|X[cm]|}
+\hline
+\rowcolor{black!80}\strut  Factors & \color{white}Plan & \color{white}Actual Achievment \\
+UI & clean & somewhat cool \\
+number of algorithms & 2 & 2 \\
+parameters & adjustable & some are adjustable \\
+speed & no crash & fast enough except for ANN\\
+tutorial & readable & detailed \\
+\hline
+\end{tabu}
+
+We successfully implemented both of our target algorithms. In our proposal, we mentioned we would like to do a comparative analysis for similar algorithms. However, we couldn't 
+
+The two SVMs we presented handle both linear and non-linear datasets. We used the RBF kernel, and we didn't have enough time to add more options, but the RBF $\sigma$ is adjustable.
+
+For the ANN, the number of layers and the number of neurons in each layer are both adjustable, and the configuration is displayed whenever a change is made.
 
 \section*{Acknowledgments}
 
