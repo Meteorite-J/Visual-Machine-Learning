@@ -176,9 +176,9 @@
         }
         var setting = "";
         for(var i=0; i<config.length-1; i++){
-          setting.concat(config[i] + "-");
+          setting = setting.concat(config[i] + "-");
         }
-        setting.concat(config[config.length-1]);
+        setting = setting.concat(config[config.length-1]);
         document.getElementById('message').innerHTML = 'Now the config is' + setting;
       }
     </script>
