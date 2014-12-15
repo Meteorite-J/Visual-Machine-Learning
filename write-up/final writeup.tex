@@ -137,211 +137,59 @@ The user is able to switch from a linear SVM to using a kernel and the model is 
 
 It is also possible to vary the value of the parameter of the RBF kernel $\sigma$, which has a big effect on the shape of the decision boundary. By the definition of the kernel, small values of $\sigma$ will make it such that only points close to each other will affect prediction because the value of the kernel will be close to zero for points far from each other. The model will look to be overfitting the data. For large values of $\sigma$, we get smooth boundaries that mis-classifies points, tending towards a linear classifier.
 
-\subsection{Results}
+\section{SMO}
 
+\subsection{Background}
 
-\subsection{The SMO Algorithm}
+SMO is one of the most popular algorithms for training SVMs. It tackles the dual representation of the SVM optimization problem, and employs an active set of constraints thus working on a subset of dual variables. Normally, training a Support Vector Machine (SVM) requires the solution of a very large quadratic programming (QP) optimization problem. SMO breaks this large QP problem into a series of smallest possible QP problems. These small QP problems are solved analytically, which avoids using a time-consuming numerical QP optimization as an inner loop. The amount of memory required for SMO is linear in the training set size, which allows SMO to handle very large training sets. Because large matrix computation is avoided, SMO scales somewhere between linear and quadratic in the training set size for various test problems, while a standard projected conjugate gradient (PCG) chunking algorithm scales somewhere between linear and cubic in the training set size. SMO's computation time is dominated by SVM evaluation, hence SMO is fastest for linear SVMs and sparse data sets.
+
+The full SMO algorithm contains many optimizations designed to speed up the algorithm on large datasets and ensure that the algorithm converges even under degenerate conditions. The SMO we present is a much simpler version.
+
+\multicolfloat{1}{2}{\centering
+                     \includegraphics{cat.eps}
+                     \captionof{figure}{A test}
+                    }
+\begin{figure} 
+ \includegraphics{fig1} 
+ \includegraphics{fig2} 
+\end{figure}
+\section{ANN}
+
+\subsection{Background}
+
+In machine learning, ANNs are a family of statistical learning algorithms and are used to estimate or approximate functions. An Artificial Neural Network (ANN) can be regard as an information processing paradigm that is inspired by the way biological nervous systems, such as the brain, process information.  The key element of this paradigm is the novel structure of the information processing system. It is composed of a large number of highly interconnected processing elements ("neurons") working in unison to solve specific problems. ANNs, like people, learn by example. Learning in biological systems involves adjustments to the synaptic connections that exist between the neurons, and this is true of ANNs as well. Simulations of ANNs appear to be a recent development. However, this field was established before the advent of computers, and has survived at least one major setback and several eras.
+
+Neural networks are remarkable when it comes to derive meaning from complicated (sometimes imprecise) data. They are often used to detect trends and extract patterns that are too complex to be noticed by normal algorithms. They have an ability to learn how to do tasks based on the data given for training or initial experience. Also, ANN computations can be carried out in parallel, and special hardware devices are being designed to take advantage of this. Modern applications of ANNs are various, such as classification, data processing (clustering, filtering...), regression analysis, etc. We are going to introduce one of the easiest neural networks - the feedforward neural network.
+
+A neural network is created by hooking together many of the "neurons" we've introduced. Each of the neurons usually have multiple inputs and one output. The commonest type of artificial neural network consists of three layers of such neurons: a layer of "input" units is connected to a layer of "hidden" units, which is connected to a layer of "output" units.
+
+\subsection{Implementation}
 \label{sect:pdf}
+We adjust the weights of the neural network to minimize the mean squared error (MSE) on training set.
+$$\underset{min}{arg} (MLE = \frac{1}{n}\sum_{i=1}^n(y_i^*-y_i)^2)$$
+For each neuron:\\\\
+\textbf{Initialization:}\\
+weights: $w$ = rand(0, 1)\\
+bias: $b$ = rand(0, 1)\\
+mean squared error: $MLE$ = 0\\
+output: $y$ = 0\\\\
+\textbf{Train:}\\
+Compute output: \\
+$sum = \boldsymbol{w}\times \boldsymbol{y},$\\
+where $\boldsymbol{y}$ is the vector containing the outputs from the previous layer.\\
+$sum = sum + bias$\\
+$y = sigmoid(sum)$\\
+Compute Error: $e = y* - y$\\
+Update Weights:
+$$w' = w + \eta *\frac{\alpha (MLE)}{\alpha w},$$
+where $\eta$ is the learning rate.\\\\
+\textbf{Predict:}\\
+$decision = (y > 0.5) ? 1:0$
 
-For the production of the electronic manuscript you must use Adobe's
-Portable Document Format (PDF). This format can be generated from
-postscript files: on Unix systems, you can use {\tt ps2pdf} for this
-purpose; under Microsoft Windows, you can use Adobe's Distiller, or
-if you have cygwin installed, you can use {\tt dvipdf} or
-{\tt ps2pdf}.  Note 
-that some word processing programs generate PDF which may not include
-all the necessary fonts (esp. tree diagrams, symbols). When you print
-or create the PDF file, there is usually an option in your printer
-setup to include none, all or just non-standard fonts.  Please make
-sure that you select the option of including ALL the fonts.  {\em
-  Before sending it, test your {\/\em PDF} by printing it from a
-  computer different from the one where it was created}. Moreover,
-some word processor may generate very large postscript/PDF files,
-where each page is rendered as an image. Such images may reproduce
-poorly.  In this case, try alternative ways to obtain the postscript
-and/or PDF.  One way on some systems is to install a driver for a
-postscript printer, send your document to the printer specifying
-``Output to a file'', then convert the file to PDF.
+\subsection{Result}
+The default configuration of out neural network is 2-10-10-1: 2 inputs (x and y coordinates), 2 layers of 10 hidden neurons each, and
+\section*{Acknowledgments}
 
-For reasons of uniformity, Adobe's {\bf Times Roman} font should be
-used. In \LaTeX2e{} this is accomplished by putting
-
-\begin{quote}
-\begin{verbatim}
-\usepackage{times}
-\usepackage{latexsym}
-\end{verbatim}
-\end{quote}
-in the preamble.
-
-Additionally, it is of utmost importance to specify the {\bf
-  US-Letter format} (8.5in $\times$ 11in) when formatting the paper.
-When working with {\tt dvips}, for instance, one should specify {\tt
-  -t letter}.
-
-Print-outs of the PDF file on US-Letter paper should be identical to the
-hardcopy version.  If you cannot meet the above requirements about the
-production of your electronic submission, please contact the
-publication chairs above  as soon as possible.
-
-
-\subsection{Layout}
-\label{ssec:layout}
-
-Format manuscripts two columns to a page, in the manner these
-instructions are formatted. The exact dimensions for a page on US-letter
-paper are:
-
-\begin{itemize}
-\item Left and right margins: 1in
-\item Top margin:1in
-\item Bottom margin: 1in
-\item Column width: 3.15in
-\item Column height: 9in
-\item Gap between columns: 0.2in
-\end{itemize}
-
-\noindent Papers should not be submitted on any other paper size. Exceptionally,
-authors for whom it is \emph{impossible} to format on US-Letter paper,
-may format for \emph{A4} paper. In this case, they should keep the \emph{top}
-and \emph{left} margins as given above, use the same column width,
-height and gap, and modify the bottom and right margins as necessary.
-Note that the text will no longer be centered.
-
-\subsection{How We Implemented it}
-\label{ssec:first}
-
-Center the title, author's name(s) and affiliation(s) across both
-columns. Do not use footnotes for affiliations.  Do not include the
-paper ID number assigned during the submission process. 
-Use the two-column format only when you begin the abstract.
-
-{\bf Title}: Place the title centered at the top of the first page, in
-a 15 point bold font.  (For a complete guide to font sizes and styles, see Table~\ref{font-table}.)
-Long title should be typed on two lines without
-a blank line intervening. Approximately, put the title at 1in from the
-top of the page, followed by a blank line, then the author's names(s),
-and the affiliation on the following line.  Do not use only initials
-for given names (middle initials are allowed). Do not format surnames
-in all capitals (e.g., ``Leacock,'' not ``LEACOCK'').  The affiliation should
-contain the author's complete address, and if possible an electronic
-mail address. Leave about 0.75in between the affiliation and the body
-of the first page.
-
-{\bf Abstract}: Type the abstract at the beginning of the first
-column.  The width of the abstract text should be smaller than the
-width of the columns for the text in the body of the paper by about
-0.25in on each side.  Center the word {\bf Abstract} in a 12 point
-bold font above the body of the abstract. The abstract should be a
-concise summary of the general thesis and conclusions of the paper.
-It should be no longer than 200 words.  The abstract text should be in 10 point font.
-
-{\bf Text}: Begin typing the main body of the text immediately after
-the abstract, observing the two-column format as shown in 
-the present document.  Do not include page numbers.
-
-{\bf Indent} when starting a new paragraph. For reasons of uniformity,
-use Adobe's {\bf Times Roman} fonts, with 11 points for text and 
-subsection headings, 12 points for section headings and 15 points for
-the title.  If Times Roman is unavailable, use {\bf Computer Modern
-  Roman} (\LaTeX2e{}'s default; see section \ref{sect:pdf} above).
-Note that the latter is about 10\% less dense than Adobe's Times Roman
-font.
-
-\subsection{Sections}
-
-{\bf Headings}: Type and label section and subsection headings in the
-style shown on the present document.  Use numbered sections (Arabic
-numerals) in order to facilitate cross references. Number subsections
-with the section number and the subsection number separated by a dot,
-in Arabic numerals. 
-
-{\bf Citations}: Citations within the text appear
-in parentheses as~\cite{Gusfield:97} or, if the author's name appears in
-the text itself, as Gusfield~\shortcite{Gusfield:97}. 
-Append lowercase letters to the year in cases of ambiguities.  
-Treat double authors as in~\cite{Aho:72}, but write as 
-in~\cite{Chandra:81} when more than two authors are involved. 
-Collapse multiple citations as in~\cite{Gusfield:97,Aho:72}.
-
-\textbf{References}: Gather the full set of references together under
-the heading {\bf References}; place the section before any Appendices,
-unless they contain references. Arrange the references alphabetically
-by first author, rather than by order of occurrence in the text.
-Provide as complete a citation as possible, using a consistent format,
-such as the one for {\em Computational Linguistics\/} or the one in the 
-{\em Publication Manual of the American 
-Psychological Association\/}~\cite{APA:83}.  Use of full names for
-authors rather than initials is preferred.  A list of abbreviations
-for common computer science journals can be found in the ACM 
-{\em Computing Reviews\/}~\cite{ACM:83}.
-
-The \LaTeX{} and Bib\TeX{} style files provided roughly fit the
-American Psychological Association format, allowing regular citations, 
-short citations and multiple citations as described above.
-
-{\bf Appendices}: Appendices, if any, directly follow the text and the
-references (but see above).  Letter them in sequence and provide an
-informative title: {\bf Appendix A. Title of Appendix}.
-
-\textbf{Acknowledgment} sections should go as a last (unnumbered) section immediately
-before the references.  
-
-\subsection{Footnotes}
-
-{\bf Footnotes}: Put footnotes at the bottom of the page. They may
-be numbered or referred to by asterisks or other
-symbols.\footnote{This is how a footnote should appear.} Footnotes
-should be separated from the text by a line.\footnote{Note the
-line separating the footnotes from the text.}  Footnotes should be in 9 point font.
-
-\subsection{Graphics}
-
-{\bf Illustrations}: Place figures, tables, and photographs in the
-paper near where they are first discussed, rather than at the end, if
-possible.  Wide illustrations may run across both columns and should be placed at
-the top of a page. Color illustrations are discouraged, unless you have verified that 
-they will be understandable when printed in black ink.
-
-\begin{table}
-\begin{center}
-\begin{tabular}{|l|rl|}
-\hline \bf Type of Text & \bf Font Size & \bf Style \\ \hline
-paper title & 15 pt & bold \\
-author names & 12 pt & bold \\
-author affiliation & 12 pt & \\
-the word ``Abstract'' & 12 pt & bold \\
-section titles & 12 pt & bold \\
-document text & 11 pt  &\\
-abstract text & 10 pt & \\
-captions & 10 pt & \\
-bibliography & 10 pt & \\
-footnotes & 9 pt & \\
-\hline
-\end{tabular}
-\end{center}
-\caption{\label{font-table} Font guide. }
-\end{table}
-
-{\bf Captions}: Provide a caption for every illustration; number each one
-sequentially in the form:  ``Figure 1. Caption of the Figure.'' ``Table 1.
-Caption of the Table.''  Type the captions of the figures and 
-tables below the body, using 10 point text.  
-
-\section{Length of Submission}
-\label{sec:length}
-
-The NAACL HLT 2010 main conference accepts submissions of long papers
-and short papers.  The maximum length of a long paper manuscript is
-eight (8) pages of content and one (1) additional page of references
-\emph{only} (appendices count against the eight pages, not the
-additional one page).  The maximum length of a short paper manuscript
-is four (4) pages including references.  For both long and short
-papers, all illustrations, references, and appendices must be
-accommodated within these page limits, observing the formatting
-instructions given in the present document.  Papers that do not
-conform to the specified length and formatting requirements are
-subject to be rejected without review.
 
 % Up to two (2) additional pages may be purchased from ACL at the
 % price of \$250 per page; please contact the publication chairs above
