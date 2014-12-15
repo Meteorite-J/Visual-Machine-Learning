@@ -26,9 +26,14 @@ Aiming to organize and present machine learning concepts in a way that people ca
 
 \section{Introduction}
 
-At the current stage, we present two different machine learning concepts, namely, Support Vector Machine (SVM) and Artificial Neural Network (ANN). For SVM, we focus on the Sequential Minimal Optimization (SMO) algorithm and the Primal Estimated Sub-Gradient Solver for SVMs. For ANN, we uses the classic feed-forward back-propagation neural network as our model. 
+At the current stage, we present two different machine learning concepts, namely, Support Vector Machine (SVM) and Artificial Neural Network (ANN).SVMs are supervised learning models with associated learning algorithms that analyze data and recognize patterns, used for classification and regression analysis. Given a set of training examples, each marked as belonging to one of two categories, an SVM training algorithm builds a model that assigns new examples into one category or the other, making it a non-probabilistic binary linear classifier. An SVM model is a representation of the examples as points in space, mapped so that the examples of the separate categories are divided by a clear gap that is as wide as possible. New examples are then mapped into that same space and predicted to belong to a category based on which side of the gap they fall on. In addition to performing linear classification, SVMs can efficiently perform a non-linear classification using what is called the kernel trick, implicitly mapping their inputs into high-dimensional feature spaces. In this report, we focus on the Sequential Minimal Optimization (SMO) algorithm and the Primal Estimated Sub-Gradient Solver for SVMs. 
 
-SVMs are effective and popular classification learning tool. The task of learning a support vector machine is cast as a constrained quadratic programming problem.  stochastic sub-gradians descent algorithm for solving the optimization problem cast by SVMs.
+ANN, on the other hand is a field of Artificial Intelligence (AI) where we, by inspiration from the human brain, find data structures and algorithms for learning and classification of data.
+Many tasks that humans perform naturally fast, such as the recognition of a familiar face, proves to
+be a very complicated task for a computer when conventional programming methods are used. By
+applying Neural Network techniques a program can learn by examples, and create an internal
+structure of rules to classify different inputs, such as recognising images. For ANN, we uses the classic feed-forward back-propagation neural network as our model. 
+
 
 
 \section{SMO}
