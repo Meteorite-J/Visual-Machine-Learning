@@ -4,7 +4,7 @@
 var smo = (function(exports){
 
   /*
-    This is a binary SVM and is trained using the SMO algorithm.
+    This is a binary SVM and is trained using the SMO algorithm written by Andrej Karpathy.
     Reference: "The Simplified SMO Algorithm" (http://math.unt.edu/~hsp0009/smo.pdf)
     
     Simple usage example:
