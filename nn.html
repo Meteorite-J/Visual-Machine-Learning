@@ -30,7 +30,7 @@
       var ss = 50.0; // scaling factor for drawing
       var trainer = new neuralnet.NN();
       var dirty = true;
-      var learningRate = 0.1;
+      var learningRate = 0.5;
       //To set, create an array with the num j of hidden layers the user enters
       //config = [2, (num of nodes on 1st input layer),.....,(num of nodes on jth input layer), 1]
       var config = null;
@@ -148,7 +148,6 @@
         }
         data = data.splice(0, defaultN);
         labels = labels.splice(0, defaultN);
-        N = 10;
         train();
       }
 
