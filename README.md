@@ -3,7 +3,7 @@ This is a game and visualization project that shows the decision boundaries gene
 
 ## About the Game
 
-You can play the game [here](http://meteorite-j.github.io/Visual-Machine-Learning)
+You can play the game [here](http://meteorite-j.github.io/Visual-Machine-Learning).
 
 As you noticed, each algorithm's page contains a 2D canvas such that new data points can be added and the boundary of a particular algorithm is adjusted accordingly each time you add a new point. You can add white data points by clicking your mouse and add black data points by shift-clicking your moust. Each point is an entry of the dataset that we are going to use to run the algorithms. The color of each point represents its classification label, and the x-y coordinates are its features (i.e. areas near white points are more likely to be classified as white, and areas near black points are more likely to be classified as black).
 
